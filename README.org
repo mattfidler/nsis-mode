@@ -1,0 +1,5 @@
+#+TITLE: NSIS-mode
+#+AUTHOR: Matthew L. Fidler
+A major mode for editing nsis files
+
+* TODO Fix multi-column comments
