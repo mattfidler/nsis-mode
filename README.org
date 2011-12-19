@@ -2,4 +2,7 @@
 #+AUTHOR: Matthew L. Fidler
 A major mode for editing nsis files
 
-* TODO Fix multi-column comments
+* NSIS Wish List/Todo List/Known issues
+** TODO Fix multi-line comments
+Multiline comments =/* */= don't work properly.
+** TODO Fix snippet generation
