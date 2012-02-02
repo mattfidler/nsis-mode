@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
-;; Version: 0.4
-;; Last-Updated: Mon Dec 19 09:40:03 2011 (-0600)
+;; Version: 0.41
+;; Last-Updated: Wed Feb  1 18:15:14 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1447
+;;     Update #: 1449
 ;; URL: http://www.emacswiki.org/emacs/download/nsis-mode.el
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
@@ -527,27 +527,28 @@
      ))
   "* nsis syntax variables"
   )
-(defvar nsis-syntax-callback
-  '(
-    ".onGUIEnd"
-    ".onGUIInit"
-    ".onInit"
-    ".onInstFailed"
-    ".onInstSuccess"
-    ".onMouseOverSection"
-    ".onRebootFailed"
-    ".onSelChange"
-    ".onUserAbort"
-    ".onVerifyInstDir"
-    "un.onGUIEnd"
-    "un.onGUIInit"
-    "un.onInit"
-    "un.onRebootFailed"
-    "un.onUninstFailed"
-    "un.onUninstSuccess"
-    "un.onUserAbort"
-    )
-  "nsis callback syntax")
+(eval-when-compile 
+  (defvar nsis-syntax-callback
+    '(
+      ".onGUIEnd"
+      ".onGUIInit"
+      ".onInit"
+      ".onInstFailed"
+      ".onInstSuccess"
+      ".onMouseOverSection"
+      ".onRebootFailed"
+      ".onSelChange"
+      ".onUserAbort"
+      ".onVerifyInstDir"
+      "un.onGUIEnd"
+      "un.onGUIInit"
+      "un.onInit"
+      "un.onRebootFailed"
+      "un.onUninstFailed"
+      "un.onUninstSuccess"
+      "un.onUserAbort"
+      )
+    "nsis callback syntax"))
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other Keywords from Logic Lib
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
