@@ -5,11 +5,11 @@
 ;; Author: Matthew L. Fidler
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
-;; Version: 0.41
-;; Last-Updated: Wed Feb  1 18:15:14 2012 (-0600)
+;; Version: 0.42
+;; Last-Updated: Thu Mar  1 14:51:46 2012 (-0600)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1449
-;; URL: http://www.emacswiki.org/emacs/download/nsis-mode.el
+;;     Update #: 1453
+;; URL: http://github.com/mlf176f2/nsis-mode
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
 ;;
@@ -37,6 +37,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 01-Mar-2012    Matthew L. Fidler  
+;;    Last-Updated: Thu Mar  1 14:49:14 2012 (-0600) #1450 (Matthew L. Fidler)
+;;    Added website.
+;; 01-Mar-2012    Matthew L. Fidler  
+;;    Last-Updated: Thu Mar  1 14:49:14 2012 (-0600) #1450 (Matthew L. Fidler)
+;;    Bug fix for syntax table.
 ;; 19-Dec-2011    Matthew L. Fidler  
 ;;    Last-Updated: Mon Dec 19 09:23:37 2011 (-0600) #1441 (Matthew L. Fidler)
 ;;    Looks for makensis if can't find in program files.
@@ -1515,8 +1521,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
     (let (
           (new-dir (if (eq (type-of 'yas/root-directory) 'symbol)
                        yas/root-directory
-                     (nth 0 yas/root-directory)
-                     ))
+                       (nth 0 yas/root-directory)
+                       ))
           (debug-on-error t)
           added-snippets
           file
@@ -1757,7 +1763,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
   (modify-syntax-entry ?\+ "."  nsis-mode-syntax-table)
   (modify-syntax-entry ?\- "."  nsis-mode-syntax-table)
   (modify-syntax-entry ?\/ ". 14"  nsis-mode-syntax-table)
-  (modify-syntax-entry ?* ". 23" nsis-mode-sytax-table)
+  ;;(modify-syntax-entry ?* ". 23" nsis-mode-sytax-table)
   (modify-syntax-entry ?\< "."  nsis-mode-syntax-table)
   (modify-syntax-entry ?\= "."  nsis-mode-syntax-table)
   (modify-syntax-entry ?\> "."  nsis-mode-syntax-table)
