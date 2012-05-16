@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
 ;; Version: 0.43
-;; Last-Updated: Wed May 16 14:11:24 2012 (-0500)
+;; Last-Updated: Wed May 16 16:14:09 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1458
+;;     Update #: 1466
 ;; URL: http://github.com/mlf176f2/nsis-mode
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
@@ -23,7 +23,7 @@
 ;;
 ;;  Put this in the load path, then add the following to your Emacs:
 ;;
-;;  (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
+;; (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
 ;;
 ;; (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Ii]\\)$" .
 ;;                                  nsis-mode)) auto-mode-alist))
@@ -36,6 +36,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 16-May-2012    Matthew L. Fidler  
+;;    Last-Updated: Wed May 16 16:10:18 2012 (-0500) #1463 (Matthew L. Fidler)
+;;    Added label indentation support for labels of the form "label_${ONE}:"
 ;; 16-May-2012    Matthew L. Fidler  
 ;;    Last-Updated: Wed May 16 13:56:32 2012 (-0500) #1457 (Matthew L. Fidler)
 ;;    Fixed random hang
@@ -1852,7 +1855,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       )
 (setq nsis-indent-deindent-keywords
       (eval-when-compile
-        (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
+        (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
                                   (regexp-opt
                                    '( "@"
                                       "${AndIf}" "${AndIfNot}" "${AndUnless}" "${OrIf}"
@@ -1866,7 +1869,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 
 (setq nsis-indent-orphans
       (eval-when-compile
-        (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
+        (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
                                   (regexp-opt
                                    '( "@"
                                       "${CaseElse}" "${Default}" "${Case2}"
