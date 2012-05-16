@@ -5,18 +5,17 @@
 ;; Author: Matthew L. Fidler
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
-;; Version: 0.42
-;; Last-Updated: Thu Mar  1 14:51:46 2012 (-0600)
+;; Version: 0.43
+;; Last-Updated: Wed May 16 14:11:24 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1453
+;;     Update #: 1458
 ;; URL: http://github.com/mlf176f2/nsis-mode
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   `cl', `easymenu', `font-lock', `hideshow', `syntax',
-;;   `w32-browser'.
+;;   None
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -37,6 +36,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 16-May-2012    Matthew L. Fidler  
+;;    Last-Updated: Wed May 16 13:56:32 2012 (-0500) #1457 (Matthew L. Fidler)
+;;    Fixed random hang
+;; 16-May-2012    Matthew L. Fidler  
+;;    Last-Updated: Wed May 16 13:42:34 2012 (-0500) #1454 (Matthew L. Fidler)
+;;    Attempted to fix random hangs.  It could be due to indentation
+;;    infinite loop, so made sure (bobp) is always checked at the
+;;    beginning of the line.
 ;; 01-Mar-2012    Matthew L. Fidler  
 ;;    Last-Updated: Thu Mar  1 14:49:14 2012 (-0600) #1450 (Matthew L. Fidler)
 ;;    Added website.
@@ -1905,7 +1912,12 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
           (nsis-goto-last-line li-q)
           (setq count 1)
           (nsis-set-indent-count count)
-          (while (and (not (bobp)) (not (= count 0)))
+          (while (and (not (save-excursion
+                             (beginning-of-line)
+                             (or (bobp)
+                                 (progn
+                                   (skip-chars-backward " \t\n")
+                                   (bobp))))) (not (= count 0)))
             (nsis-goto-last-line li-q)
             (nsis-set-indent-count count))))
     (while (re-search-backward "^[ \t]*\n\\=" nil t))
@@ -2031,7 +2043,10 @@ Returns first position.
       (cond
        ((save-excursion
           (beginning-of-line)
-          (bobp)) ;; First line is indented to zero.
+          (or (bobp)
+              (progn
+                (skip-chars-backward " \t\n")
+                (bobp)))) ;; First line is indented to zero.
         (setq fli 0))
        ((nsis-continuation-line-p) ;; Add 4 spaces to indentation
         ;;                (message "Continuation line.")
