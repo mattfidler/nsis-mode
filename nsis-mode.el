@@ -6,9 +6,9 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
 ;; Version: 0.43
-;; Last-Updated: Wed May 16 16:14:09 2012 (-0500)
+;; Last-Updated: Fri Jun  8 09:58:06 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1466
+;;     Update #: 1469
 ;; URL: http://github.com/mlf176f2/nsis-mode
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
@@ -36,6 +36,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 08-Jun-2012    Matthew L. Fidler  
+;;    Last-Updated: Fri Jun  8 09:57:12 2012 (-0500) #1468 (Matthew L. Fidler)
+;;    Changed _ to syntax class
 ;; 16-May-2012    Matthew L. Fidler  
 ;;    Last-Updated: Wed May 16 16:10:18 2012 (-0500) #1463 (Matthew L. Fidler)
 ;;    Added label indentation support for labels of the form "label_${ONE}:"
@@ -487,7 +490,8 @@
 
 (defvar nsis-syntax-variable
   (append
-   ;; Unlike what is in HM NIS editor, there are 20 registers, put them ALL in.
+   ;; Unlike what is in HM NIS editor, there are 20 registers, put
+   ;; them ALL in.
    (mapcar (lambda(x) (format "$%s" x))
            (number-sequence 0 20))
    (mapcar (lambda(x) (format "$R%s" x))
@@ -1531,8 +1535,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
     (let (
           (new-dir (if (eq (type-of 'yas/root-directory) 'symbol)
                        yas/root-directory
-                       (nth 0 yas/root-directory)
-                       ))
+                     (nth 0 yas/root-directory)
+                     ))
           (debug-on-error t)
           added-snippets
           file
@@ -1779,17 +1783,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
   (modify-syntax-entry ?\> "."  nsis-mode-syntax-table)
   (modify-syntax-entry ?\| "."  nsis-mode-syntax-table)
   (modify-syntax-entry ?. "."  nsis-mode-syntax-table)
-  ;; For historical reasons, underscore is word class instead of
-  ;; symbol class.  GNU conventions say it should be symbol class, but
-  ;; there's a natural conflict between what major mode authors want
-  ;; and what users expect from `forward-word' and `backward-word'.
-  ;; Guido and I have hashed this out and have decided to keep
-  ;; underscore in word class.  If you're tempted to change it, try
-  ;; binding M-f and M-b to nsis-forward-into-nomenclature and
-  ;; nsis-backward-into-nomenclature instead.  This doesn't help in all
-  ;; situations where you'd want the different behavior
-  ;; (e.g. backward-kill-word).
-  (modify-syntax-entry ?\_ "w"  nsis-mode-syntax-table)
+  (modify-syntax-entry ?\_ "_"  nsis-mode-syntax-table)
   (modify-syntax-entry ?! "w" nsis-mode-syntax-table)
   ;;(modify-syntax-entry ?. "w" nsis-mode-syntax-table)
   ;;(modify-syntax-entry ?- "w" nsis-mode-syntax-table)
