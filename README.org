@@ -1,8 +1,56 @@
 #+TITLE: NSIS-mode
 #+AUTHOR: Matthew L. Fidler
+* Library Information
+ *nsis-mode.el* --- NSIS-mode
+
+ - Filename :: [[file:nsis-mode.el][nsis-mode.el]]
+ - Description :: NSIS mode
+ - Author :: Matthew L. Fidler
+ - Maintainer :: Matthew L. Fidler
+ - Created :: Tue Nov 16 15:48:02 2010 (-0600)
+ - Version :: 0.44
+ - Last-Updated :: Mon Aug 20 13:08:25 2012 (-0500)
+ -           By :: Matthew L. Fidler
+ -     Update # :: 1477
+ - URL :: http://github.com/mlf176f2/nsis-mode
+ - Keywords :: NSIS
+ - Compatibility :: Emacs 23.2
+
+* Possible Dependencies
+
+  None
+
 A major mode for editing nsis files
 
-* NSIS Wish List/Todo List/Known issues
-** TODO Fix multi-line comments
-Multiline comments =/* */= don't work properly.
-** TODO Fix snippet generation
+* Installation
+
+Put this =nsis-mode= the load path, then add the following to your Emacs:
+#+BEGIN_SRC emacs-lisp
+ (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
+
+ (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Ii]\\)$" .
+                                  nsis-mode)) auto-mode-alist))
+
+ (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Hh]\\)$" .
+                                  nsis-mode)) auto-mode-alist))
+
+#+END_SRC
+
+* History
+
+ - 20-Aug-2012 ::  Added nsis-indent-level to allow customization of indentation. (Matthew L. Fidler)
+ - 08-Jun-2012 ::  Changed _ to syntax class (Matthew L. Fidler)
+ - 16-May-2012 ::  Added label indentation support for labels of the form "label_${ONE}:" (Matthew L. Fidler)
+ - 16-May-2012 ::  Fixed random hang (Matthew L. Fidler)
+ - 16-May-2012 ::  Attempted to fix random hangs. It could be due to indentation infinite loop, so made sure (bobp) is always checked at the beginning of the line. (Matthew L. Fidler)
+ - 01-Mar-2012 ::  Added website. (Matthew L. Fidler)
+ - 01-Mar-2012 ::  Bug fix for syntax table. (Matthew L. Fidler)
+ - 19-Dec-2011 ::  Looks for makensis if can't find in program files. (Matthew L. Fidler)
+ - 19-Dec-2011 ::  Added .nsi and .nsh autoload (Matthew L. Fidler)
+ - 07-Feb-2011 ::  Added check to make sure compile went OK before launching executable. (Matthew L. Fidler)
+ - 25-Jan-2011 ::  Added more explicit setup instructions (Matthew L. Fidler)
+ - 06-Dec-2010 ::  Changed comment start and comment stop to single line semi-colons (Matthew L. Fidler)
+ - 06-Dec-2010 ::  Made nsis-yas-description not depend on finding MUI_FUNCTION_DESCRIPTION_BEGIN. If MUI_DESCRIPTION_TEXT is found, insert there. (Matthew L. Fidler)
+ - 06-Dec-2010 ::  Updated indentation line function (bug-fix) (Matthew L. Fidler)
+ - 23-Nov-2010 ::  Macros that end with END or BEGIN are indentation keywords. (Matthew L. Fidler)
+  - 23-Nov-2010 ::  Changed indentation routine (bugfix)  ()

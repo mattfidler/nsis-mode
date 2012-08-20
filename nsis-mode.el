@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
-;; Version: 0.43
-;; Last-Updated: Fri Jun  8 09:58:06 2012 (-0500)
+;; Version: 0.44
+;; Last-Updated: Mon Aug 20 13:08:56 2012 (-0500)
 ;;           By: Matthew L. Fidler
-;;     Update #: 1469
+;;     Update #: 1478
 ;; URL: http://github.com/mlf176f2/nsis-mode
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
@@ -20,22 +20,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;;
-;;  Put this in the load path, then add the following to your Emacs:
-;;
-;; (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
-;;
-;; (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Ii]\\)$" .
-;;                                  nsis-mode)) auto-mode-alist))
-;;
-;; (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Hh]\\)$" .
-;;                                  nsis-mode)) auto-mode-alist))
-;;
-;; Thats it.
-;;
+;; 
+;; A major mode for editing nsis files
+;; 
+;; * Installation
+;; 
+;; Put this `nsis-mode' the load path, then add the following to your Emacs:
+;; 
+;;  (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
+;; 
+;;  (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Ii]\\)$" .
+;;                                   nsis-mode)) auto-mode-alist))
+;; 
+;;  (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Hh]\\)$" .
+;;                                   nsis-mode)) auto-mode-alist))
+;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 20-Aug-2012    Matthew L. Fidler  
+;;    Last-Updated: Mon Aug 20 13:08:06 2012 (-0500) #1476 (Matthew L. Fidler)
+;;    Added nsis-indent-level to allow customization of indentation.
 ;; 08-Jun-2012    Matthew L. Fidler  
 ;;    Last-Updated: Fri Jun  8 09:57:12 2012 (-0500) #1468 (Matthew L. Fidler)
 ;;    Changed _ to syntax class
@@ -900,31 +905,34 @@
 (defun nsis-font-lock-syntax-variable (limit)
   "Font lock of syntax variable -- not allowed in comments"
   (interactive (list (point-max)))  
-  (nsis-font-lock-no-comment limit (eval-when-compile
-                                     (replace-regexp-in-string "@" "\\>"
-                                                               (regexp-opt
-                                                                (append
-                                                                 (list
-                                                                  "$(^Font)"
-                                                                  "$(^FontSize)"
-                                                                  "$\\n"
-                                                                  "$\\r"
-                                                                  "$\\t"
-                                                                  "$\\\""
-                                                                  "$\\'"
-                                                                  "$\\`"
-                                                                  "$$")
-                                                                 (mapcar (lambda(x)
-                                                                           (if (string-match "[0-9]$" x)
-                                                                               x
-                                                                             (concat x "@"))
-                                                                           )
-                                                                         nsis-syntax-variable)
-                                                                 (mapcar (lambda(x)
-                                                                           (concat "${" (substring x 1) "}")
-                                                                           )
-                                                                         nsis-syntax-variable))
-                                                                t) t  t))))
+  (nsis-font-lock-no-comment
+   limit
+   (eval-when-compile
+     (replace-regexp-in-string
+      "@" "\\>"
+      (regexp-opt
+       (append
+        (list
+         "$(^Font)"
+         "$(^FontSize)"
+         "$\\n"
+         "$\\r"
+         "$\\t"
+         "$\\\""
+         "$\\'"
+         "$\\`"
+         "$$")
+        (mapcar
+         (lambda(x)
+           (if (string-match "[0-9]$" x)
+               x
+             (concat x "@")))
+         nsis-syntax-variable)
+        (mapcar
+         (lambda(x)
+           (concat "${" (substring x 1) "}"))
+         nsis-syntax-variable))
+       t) t  t))))
 (setq nsis-font-lock-syntactic-keywords
       '(
         ("[$]\\([\\\\]\\)" 1 "\\")
@@ -1626,6 +1634,11 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
   "nsis -- Yet another NSI-editing mode, www.nsi.org"
   :group 'languages)
 
+(defcustom nsis-indent-level 2
+  "Indentation level for `nsis-mode'."
+  :type 'integer
+  :group 'nsis-mode)
+
 (defcustom nsis-nsis-manual-file
   (let ((nsis (concat (getenv "ProgramFiles")
                       "/nsis/nsis.chm")))
@@ -2030,8 +2043,7 @@ Returns first position.
 (defun nsis-indent-line-function ()
   "nsis indent-line function"
   (interactive)
-  (let (
-        (curi (current-indentation))
+  (let ((curi (current-indentation))
         li
         is-id
         orphan
@@ -2048,8 +2060,8 @@ Returns first position.
        ((nsis-continuation-line-p) ;; Add 4 spaces to indentation
         ;;                (message "Continuation line.")
         (setq li (nsis-last-line-indentation))
-        (unless (= (+ 4 li) curi)
-          (setq fli (+ 4 li))))
+        (unless (= (+ (* 2 nsis-indent-level) li) curi)
+          (setq fli (+ (* 2 nsis-indent-level) li))))
        ((nsis-in-multiline-comment-p) ;; Check for multi-line comments and strings
         ;; Do nothing.
         ;;(message "Multiline comment -- No indentation support")
@@ -2063,16 +2075,16 @@ Returns first position.
           (if orphan
               (save-excursion
                 (nsis-goto-last-line 'li t)
-                (setq li (+ 2 li))
+                (setq li (+ nsis-indent-level li))
                 (unless (= li curi) ;; Last line was an orphan too, keep the same indentation
                   (setq fli li)))
-            (unless (= (+ 2 li) curi) ;; Indent
-              (setq fli (+ li 2))))))
+            (unless (= (+ nsis-indent-level li) curi) ;; Indent
+              (setq fli (+ li nsis-indent-level))))))
        ((nsis-current-line-deindent-p) ;; Deindentation is possible
         (setq orphan (string-match (eval-when-compile (format "^[ \t]*%s" nsis-indent-orphans)) (match-string 0)))
         (setq li (nsis-last-line-indentation t))
         (when orphan
-          (setq li (+ li 2)))
+          (setq li (+ li nsis-indent-level)))
         (setq li (max 0 li))
         (unless (= li curi)
           (setq fli li))

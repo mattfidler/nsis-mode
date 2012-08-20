@@ -1,0 +1,4 @@
+(nsis-mode
+ :repo "mlf176f2/nsis-mode"
+ :fetcher github
+ :files ("nsis-mode.el"))

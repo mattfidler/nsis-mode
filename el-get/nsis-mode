@@ -1,0 +1,5 @@
+(:name nsis-mode
+ :description "nsis-mode"
+ :website "https://github.com/mlf176f2/nsis-mode"
+ :type git
+ :url "https://github.com/mlf176f2/nsis-mode.git")

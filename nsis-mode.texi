@@ -1,0 +1,106 @@
+\input texinfo
+@documentencoding UTF-8
+
+@ifnottex
+@paragraphindent 0
+@end ifnottex
+@node Top
+@top Top
+
+@menu
+* NSIS-mode::
+@end menu
+
+@node NSIS-mode
+@chapter NSIS-mode
+Matthew L. Fidler ## Library Information @strong{nsis-mode.el} --- NSIS-mode
+
+@itemize
+@item
+@strong{Filename} -- nsis-mode.el
+@item
+@strong{Description} -- NSIS mode
+@item
+@strong{Author} -- Matthew L. Fidler
+@item
+@strong{Maintainer} -- Matthew L. Fidler
+@item
+@strong{Created} -- Tue Nov 16 15:48:02 2010 (-0600)
+@item
+@strong{Version} -- 0.44
+@item
+@strong{Last-Updated} -- Mon Aug 20 13:08:25 2012 (-0500)
+@item
+@strong{By} -- Matthew L. Fidler
+@item
+@strong{Update #} -- 1477
+@item
+@strong{URL} -- http:__github.com_mlf176f2_nsis-mode
+@item
+@strong{Keywords} -- NSIS
+@item
+@strong{Compatibility} -- Emacs 23.2
+@end itemize
+
+@menu
+* Possible Dependencies::
+* Installation::
+* History::
+@end menu
+
+@node Possible Dependencies
+@section Possible Dependencies
+None
+
+A major mode for editing nsis files
+
+@node Installation
+@section Installation
+Put this @code{nsis-mode} the load path@comma{} then add the following to your Emacs:
+
+(autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
+
+(setq auto-mode-alist (append '(("\.\([Nn][Ss][Ii]\)$" . nsis-mode)) auto-mode-alist))
+
+(setq auto-mode-alist (append '(("\.\([Nn][Ss][Hh]\)$" . nsis-mode)) auto-mode-alist))
+
+@node History
+@section History
+@itemize
+@item
+@strong{20-Aug-2012} -- Added nsis-indent-level to allow customization of indentation. (Matthew L. Fidler)
+@item
+@strong{08-Jun-2012} -- Changed _ to syntax class (Matthew L. Fidler)
+@item
+@strong{16-May-2012} -- Added label indentation support for labels of the form "label_$@{ONE@}:" (Matthew L. Fidler)
+@item
+@strong{16-May-2012} -- Fixed random hang (Matthew L. Fidler)
+@item
+@strong{16-May-2012} -- Attempted to fix random hangs. It could be due to indentation infinite loop@comma{} so made sure (bobp) is always checked at the beginning of the line. (Matthew L. Fidler)
+@item
+@strong{01-Mar-2012} -- Added website. (Matthew L. Fidler)
+@item
+@strong{01-Mar-2012} -- Bug fix for syntax table. (Matthew L. Fidler)
+@item
+@strong{19-Dec-2011} -- Looks for makensis if can't find in program files. (Matthew L. Fidler)
+@item
+@strong{19-Dec-2011} -- Added .nsi and .nsh autoload (Matthew L. Fidler)
+@item
+@strong{07-Feb-2011} -- Added check to make sure compile went OK before launching executable. (Matthew L. Fidler)
+@item
+@strong{25-Jan-2011} -- Added more explicit setup instructions (Matthew L. Fidler)
+@item
+@strong{06-Dec-2010} -- Changed comment start and comment stop to single line semi-colons (Matthew L. Fidler)
+@item
+@strong{06-Dec-2010} -- Made nsis-yas-description not depend on finding MUI
+FUNCTION<_ul>DESCRIPTION
+BEGIN. If MUI<_ul>DESCRIPTION_TEXT is found@comma{} insert there. (Matthew L. Fidler)
+@item
+@strong{06-Dec-2010} -- Updated indentation line function (bug-fix) (Matthew L. Fidler)
+@item
+@strong{23-Nov-2010} -- Macros that end with END or BEGIN are indentation keywords. (Matthew L. Fidler)
+@item
+@strong{23-Nov-2010} -- Changed indentation routine (bugfix) ()
+@end itemize
+
+@bye
