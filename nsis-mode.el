@@ -5,10 +5,10 @@
 ;; Author: Matthew L. Fidler
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
-;; Version: 0.44
-;; Last-Updated: Mon Aug 20 13:08:56 2012 (-0500)
-;;           By: Matthew L. Fidler
-;;     Update #: 1478
+;; Version: 0.45
+;; Last-Updated: Mon Jul 08 21:05:17 2013 (+0100)
+;;           By: Jan T. Sott
+;;     Update #: 1479
 ;; URL: http://github.com/mlf176f2/nsis-mode
 ;; Keywords: NSIS
 ;; Compatibility: Emacs 23.2
@@ -38,6 +38,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
+;; 08-Jul-2013    Jan T. Sott
+;;    Last-Updated: Mon Jul 08 21:05:17 2013 (+0100) #1476 (Jan T. Sott)
+;;    Added new NSIS 3.0a0 commands, sorted command list
 ;; 20-Aug-2012    Matthew L. Fidler  
 ;;    Last-Updated: Mon Aug 20 13:08:06 2012 (-0500) #1476 (Matthew L. Fidler)
 ;;    Added nsis-indent-level to allow customization of indentation.
