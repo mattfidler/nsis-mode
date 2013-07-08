@@ -8,10 +8,10 @@
 - __Author__ --  Matthew L. Fidler
 - __Maintainer__ --  Matthew L. Fidler
 - __Created__ --  Tue Nov 16 15:48:02 2010 (-0600)
-- __Version__ --  0.44
-- __Last-Updated__ --  Mon Aug 20 13:08:25 2012 (-0500)
-- __By__ --  Matthew L. Fidler
-- __Update #__ --  1477
+- __Version__ --  0.45
+- __Last-Updated__ --  Mon Jul 08 21:05:17 2013 (+0100)
+- __By__ --  Jan T. Sott
+- __Update #__ --  1479
 - __URL__ --  http:__github.com_mlf176f2_nsis-mode
 - __Keywords__ --  NSIS
 - __Compatibility__ --  Emacs 23.2
@@ -38,6 +38,7 @@ Put this `nsis-mode` the load path, then add the following to your Emacs:
 
 ## History
 
+- __08-Jul-2013__ --   Added new NSIS 3.0a0 commands, sorted command list. (Jan T. Sott)
 - __20-Aug-2012__ --   Added nsis-indent-level to allow customization of indentation. (Matthew L. Fidler)
 - __08-Jun-2012__ --   Changed _ to syntax class (Matthew L. Fidler)
 - __16-May-2012__ --   Added label indentation support for labels of the form "label_${ONE}:" (Matthew L. Fidler)
