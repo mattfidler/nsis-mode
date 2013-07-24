@@ -339,7 +339,7 @@
   "* nsis syntax function")
 (defvar nsis-syntax-directive
   '(
-    !include
+    "!include"
     "!addincludedir"
     "!addplugindir"
     "!appendfile"
