@@ -761,7 +761,7 @@
           (symbol-value 'ret)))
     (error
      (message "Error in `nsis-font-lock-extended-region-continue': %s"
-              (error-message-string error) nil))))
+              (error-message-string error)))))
 
 (defface nsis-font-lock-bold-string-face nil
   "Font lock bold string face."
