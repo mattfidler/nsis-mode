@@ -6,7 +6,7 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
 ;; Version: 0.45
-;; Last-Updated: Mon Jul 08 21:05:17 2013 (+0100)
+;; Last-Updated: Wed May 23 10:15:50 2013 (+0100)
 ;;           By: Jan T. Sott
 ;;     Update #: 1479
 ;; URL: http://github.com/mlf176f2/nsis-mode
