@@ -179,6 +179,8 @@
     "PageCallbacks"
     "PageEx"
     "PageExEnd"
+    "PEDllCharacteristics"
+    "PESubsysVer"
     "RequestExecutionLevel"
     "Section"
     "SectionEnd"
@@ -1271,6 +1273,7 @@ package.")
           "LicenseText \"${1:text}\"${2: \"${3:button_text}\"}"
           "Name \"${1:name_doubled_ampersands}\""
           "OutFile \"${1:install.exe}\""
+          "PEDllCharacteristics ${1:addbits} ${2:removebits}"
           "RequestExecutionLevel ${1:$$(yas/choose-value '(\"none\" \"user\" \"highest\" \"admin\"))}"
           "SetFont${1: /LANG=${2:LANGUAGE_ID}} \"${3:font_face_name}\" ${4:font_size}"
           "ShowInstDetails ${1:$$(yas/choose-value '(\"hide\" \"show\" \"nevershow\"))}"
@@ -1299,6 +1302,7 @@ package.")
           ))
         ("Version Information"
          (
+          "PESubsysVer ${1:major}.${2:minor}"
           "VIAddVersionKey${1: /LANG=${2:lang_id}} \"${3:$$(yas/choose-value '(\"ProductName\" \"Comments\" \"CompanyName\" \"LegalCopyright\" \"FileDescription\" \"FileVersion\" \"ProductVersion\" \"InternalName\" \"LegalTrademarks\" \"OriginalFilename\" \"PrivateBuild\" \"SpecialBuild\"))}\" \"${4:value}\""
           "VIFileVersion ${1:version_string_X.X.X.X}"
           "VIProductVersion \"${1:`(format-time-string \"%h\")`}.${2:`(format-time-string \"%d\")`}.${3:`(format-time-string \"%m\")`}.{4:`(format-time-string \"%Y\")`}\""
