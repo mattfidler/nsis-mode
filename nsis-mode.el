@@ -147,7 +147,6 @@
     "CompletedText"
     "ComponentText"
     "DetailsButtonText"
-    "DirShow"
     "DirText"
     "DirVar"
     "DirVerify"
@@ -202,8 +201,6 @@
     "SilentUnInstall"
     "SpaceTexts"
     "SubCaption"
-    "SubSection"
-    "SubSectionEnd"
     "Unicode"
     "UninstPage"
     "UninstallButtonText"
@@ -754,6 +751,24 @@
     "KillTimer"
     )
   "NSD functions")
+(defvar nsis-syntax-deprecated
+  '(
+    "CompareDLLVersions"
+    "CompareFileTimes"
+    "DirShow"
+    "DisabledBitmap"
+    "EnabledBitmap"
+    "GetFullDLLPath"
+    "GetParent"
+    "GetWinampInstPath"
+    "PackEXEHeader"
+    "SectionDivider"
+    "SetPluginUnload"
+    "SubSection"
+    "SubSectionEnd"
+    "UninstallExeName"
+    )
+  "* nsis syntax deprecated")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Font Lock Keywords
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
