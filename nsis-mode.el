@@ -6,7 +6,7 @@
 ;; Maintainer: Matthew L. Fidler
 ;; Created: Tue Nov 16 15:48:02 2010 (-0600)
 ;; Version: 0.45
-;; Last-Updated: Mon Jul 08 21:05:17 2013 (+0100)
+;; Last-Updated: Wed May 23 10:15:50 2013 (+0100)
 ;;           By: Jan T. Sott
 ;;     Update #: 1479
 ;; URL: http://github.com/mlf176f2/nsis-mode
@@ -170,6 +170,8 @@
     "LicenseLangString"
     "LicenseText"
     "LoadLanguageFile"
+    "ManifestDPIAware"
+    "ManifestSupportedOS"
     "MiscButtonText"
     "Name"
     "OutFile"
@@ -177,6 +179,8 @@
     "PageCallbacks"
     "PageEx"
     "PageExEnd"
+    "PEDllCharacteristics"
+    "PESubsysVer"
     "RequestExecutionLevel"
     "Section"
     "SectionEnd"
@@ -208,6 +212,7 @@
     "UninstallSubCaption"
     "UninstallText"
     "VIAddVersionKey"
+    "VIFileVersion"
     "VIProductVersion"
     "Var"
     "WindowIcon"
@@ -239,6 +244,7 @@
     "Exch"
     "Exec"
     "ExecShell"
+    "ExecShellWait"
     "ExecWait"
     "ExpandEnvStrings"
     "File"
@@ -277,9 +283,15 @@
     "InitPluginsDir"
     "InstTypeGetText"
     "InstTypeSetText"
+    "Int64Cmp"
+    "Int64CmpU"
+    "Int64Fmt"
     "IntCmp"
     "IntCmpU"
     "IntFmt"
+    "IntPtrCmp"
+    "IntPtrCmpU"
+    "IntPtrOp"
     "IntOp"
     "IsWindow"
     "LockWindow"
@@ -333,35 +345,40 @@
     "WriteRegBin"
     "WriteRegDWORD"
     "WriteRegExpandStr"
+    "WriteRegMultiStr"
+    "WriteRegNone"
     "WriteRegStr"
     "WriteUninstaller"
     )
   "* nsis syntax function")
 (defvar nsis-syntax-directive
   '(
-    "!include"
     "!addincludedir"
     "!addplugindir"
     "!appendfile"
     "!cd"
+    "!define"
     "!delfile"
     "!echo"
     "!error"
     "!execute"
-    "!packhdr"
     "!finalize"
     "!getdllversion"
-    "!system"
-    "!tempfile"
-    "!warning"
-    "!verbose"
-    "!define"
-    "!undef"
+    "!gettlbversion"
+    "!include"
     "!insertmacro"
     "!macro"
     "!macroend"
+    "!makensis"
+    "!packhdr"
+    "!pragma"
     "!searchparse"
     "!searchreplace"
+    "!system"
+    "!tempfile"
+    "!undef"
+    "!verbose"
+    "!warning"
     )
   "nsis syntax directive")
 (defvar nsis-syntax-parameter
@@ -396,10 +413,16 @@
     "SW_SHOWMAXIMIZED"
     "SW_SHOWMINIMIZED"
     "HKCR"
+    "HKCR32"
+    "HKCR64"
     "HKEY_CLASSES_ROOT"
     "HKLM"
+    "HKLM32"
+    "HKLM64"
     "HKEY_LOCAL_MACHINE"
     "HKCU"
+    "HKCU32"
+    "HKCU64"
     "HKEY_CURRENT_USER"
     "HKU"
     "HKEY_USERS"
@@ -1250,6 +1273,7 @@ package.")
           "LicenseText \"${1:text}\"${2: \"${3:button_text}\"}"
           "Name \"${1:name_doubled_ampersands}\""
           "OutFile \"${1:install.exe}\""
+          "PEDllCharacteristics ${1:addbits} ${2:removebits}"
           "RequestExecutionLevel ${1:$$(yas/choose-value '(\"none\" \"user\" \"highest\" \"admin\"))}"
           "SetFont${1: /LANG=${2:LANGUAGE_ID}} \"${3:font_face_name}\" ${4:font_size}"
           "ShowInstDetails ${1:$$(yas/choose-value '(\"hide\" \"show\" \"nevershow\"))}"
@@ -1278,7 +1302,9 @@ package.")
           ))
         ("Version Information"
          (
+          "PESubsysVer ${1:major}.${2:minor}"
           "VIAddVersionKey${1: /LANG=${2:lang_id}} \"${3:$$(yas/choose-value '(\"ProductName\" \"Comments\" \"CompanyName\" \"LegalCopyright\" \"FileDescription\" \"FileVersion\" \"ProductVersion\" \"InternalName\" \"LegalTrademarks\" \"OriginalFilename\" \"PrivateBuild\" \"SpecialBuild\"))}\" \"${4:value}\""
+          "VIFileVersion ${1:version_string_X.X.X.X}"
           "VIProductVersion \"${1:`(format-time-string \"%h\")`}.${2:`(format-time-string \"%d\")`}.${3:`(format-time-string \"%m\")`}.{4:`(format-time-string \"%Y\")`}\""
           ))
         ("Basic Instructions"
@@ -1347,8 +1373,12 @@ package.")
           "IfFileExists ${1:file_to_check_for} ${2:jump_if_present} ${3:jump_otherwise}"
           "IfRebootFlag ${1:jump_if_set} ${2:jump_if_not_set}"
           "IfSilent ${1:jump_if_silent} ${2:jump_if_not}"
+          "Int64Cmp ${1:val1} ${2:val2} ${3:jump_if_equal}${4: ${5:jump_if_val1_less} ${6:jump_if_val1_more}}"
+          "Int64CmpU ${1:val1} ${2:val2} ${3:jump_if_equal}${4: ${5:jump_if_val1_less} ${6:jump_if_val1_more}}"
           "IntCmp ${1:val1} ${2:val2} ${3:jump_if_equal}${4: ${5:jump_if_val1_less} ${6:jump_if_val1_more}}"
           "IntCmpU ${1:val1} ${2:val2} ${3:jump_if_equal}${4: ${5:jump_if_val1_less} ${6:jump_if_val1_more}}"
+          "IntPtrCmp ${1:val1} ${2:val2} ${3:jump_if_equal}${4: ${5:jump_if_val1_less} ${6:jump_if_val1_more}}"
+          "IntPtrCmpU ${1:val1} ${2:val2} ${3:jump_if_equal}${4: ${5:jump_if_val1_less} ${6:jump_if_val1_more}}"
           "StrCmp ${1:val1} ${2:val2} ${3:jump_if_equal} ${4:jump if not equal}"
           "StrCmpS ${1:val1} ${2:val2} ${3:jump_if_equal} ${4:jump if not equal}"
           ;; Return
@@ -1385,8 +1415,10 @@ package.")
           ))
         ("Integer Support"
          (
+          "Int64Fmt \\$${1:user_var(output)} ${2:format} ${3:numberstring}"
           "IntFmt \\$${1:user_var(output)} ${2:format} ${3:numberstring}"
           "IntOp \\$${1:user_var(output)} ${2:va1} ${3:+} ${2:va2}"
+          "IntPtrOp \\$${1:user_var(output)} ${2:va1} ${3:+} ${2:va2}"
           ))
         ("Useful Scripts"
          (
@@ -1851,7 +1883,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                        (append (mapcar (lambda(x) (concat "`" (substring x 0 -3) "'"))
                                                                                                        (remove-if-not (lambda(x) (string-match "End$" x))
                                                                                                                       nsis-syntax-reserved-word))
-                                                                                               '("`!ifdef'" "`!ifndef'"
+                                                                                               '("`!if'" "`!ifdef'" "`!ifndef'"
                                                                                                  "`!ifmacrodef'"
                                                                                                  "`!ifmacrondef'"
                                                                                                  "`!macro'"
@@ -1870,7 +1902,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       (eval-when-compile
         (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
                                   (regexp-opt
-                                   '( "@"
+                                   '( "`!elseif'"
+                                      "@"
                                       "${AndIf}" "${AndIfNot}" "${AndUnless}" "${OrIf}"
                                       "${OrIfNot}" "${OrUnless}" "${ElseIf}" "${ElseIfNot}"
                                       "${ElseUnless}" "${Else}" "${CaseElse}" "${Default}" "${Case2}"
