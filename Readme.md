@@ -38,7 +38,7 @@ Put this `nsis-mode` the load path, then add the following to your Emacs:
 
 ## History
 
-- __08-Jul-2013__ --   Added new commands added since NSIS 3.0, added missing control keywords. (Jan T. Sott)
+- __23-May-2018__ --   Added new commands added since NSIS 3.0, added missing control keywords. (Jan T. Sott)
 - __08-Jul-2013__ --   Added new NSIS 3.0a0 commands, sorted command list. (Jan T. Sott)
 - __20-Aug-2012__ --   Added nsis-indent-level to allow customization of indentation. (Matthew L. Fidler)
 - __08-Jun-2012__ --   Changed _ to syntax class (Matthew L. Fidler)
