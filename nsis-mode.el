@@ -1851,7 +1851,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                        (append (mapcar (lambda(x) (concat "`" (substring x 0 -3) "'"))
                                                                                                        (remove-if-not (lambda(x) (string-match "End$" x))
                                                                                                                       nsis-syntax-reserved-word))
-                                                                                               '("`!ifdef'" "`!ifndef'"
+                                                                                               '("`!if'" "`!ifdef'" "`!ifndef'"
                                                                                                  "`!ifmacrodef'"
                                                                                                  "`!ifmacrondef'"
                                                                                                  "`!macro'"
@@ -1870,7 +1870,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       (eval-when-compile
         (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
                                   (regexp-opt
-                                   '( "@"
+                                   '( "`!elseif'"
+                                      "@"
                                       "${AndIf}" "${AndIfNot}" "${AndUnless}" "${OrIf}"
                                       "${OrIfNot}" "${OrUnless}" "${ElseIf}" "${ElseIfNot}"
                                       "${ElseUnless}" "${Else}" "${CaseElse}" "${Default}" "${Case2}"
