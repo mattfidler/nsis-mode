@@ -1694,40 +1694,48 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 
 (defcustom nsis-nsis-manual-file
   (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/nsis.chm")))
-    (if (file-exists-p nsis)
-        nsis
-      "nsis.chm"))
+                      "/nsis/nsis.chm"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+                       "/nsis/nsis.chm")))
+    (if (file-exists-p nsis) nsis
+      (if (file-exists-p nsis2) nsis2
+	"nsis.chm")))
   "nsis help file"
   :type 'file
   :group 'nsis-mode)
 
 (defcustom nsis-nsis-menu-file
   (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/nsis.exe")))
-    (if (file-exists-p nsis)
-        nsis
-      "nsis"))
+                      "/nsis/nsis.exe"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+                       "/nsis/nsis.exe")))
+    (if (file-exists-p nsis) nsis
+        (if (file-exists-p nsis2) nsis2
+	  "nsis")))
   "nsiss Menu File"
   :type 'file
   :group 'nsis-mode)
 
 (defcustom nsis-makensis-windows-command
   (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/makensisw.exe")))
-    (if (file-exists-p nsis)
-        nsis
-      (executable-find "makensisw")))
+                      "/nsis/makensisw.exe"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+		       "/nsis/makensisw.exe")))
+    (if (file-exists-p nsis) nsis
+      (if (file-exists-p nsis2) nsis2
+	(executable-find "makensisw"))))
   "nsis-mode windows command"
   :type 'file
   :group 'nsis-mode)
 
 (defcustom nsis-makensis-command
   (let ((nsis (concat (getenv "ProgramFiles")
+                      "/nsis/makensis.exe"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
                       "/nsis/makensis.exe")))
-    (if (file-exists-p nsis)
-        nsis
-      (executable-find "makensis")))
+    (if (file-exists-p nsis) nsis
+      (if (file-exists-p nsis2) nsis2
+	(executable-find "makensis"))))
   "nsis-mode command prompt"
   :type 'file
   :group 'nsis-mode)
