@@ -25,14 +25,11 @@
 ;; 
 ;; * Installation
 ;; 
-;; Put this `nsis-mode' the load path, then add the following to your Emacs:
+;; Put nsis-mode on your load-path, then add the following to your Emacs:
 ;; 
 ;;  (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
 ;; 
-;;  (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Ii]\\)$" .
-;;                                   nsis-mode)) auto-mode-alist))
-;; 
-;;  (setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Hh]\\)$" .
+;;  (setq auto-mode-alist (append '(("\\.[Nn][Ss][HhIi]\\'" .
 ;;                                   nsis-mode)) auto-mode-alist))
 ;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -119,11 +116,9 @@
 
 (defvar nsis-version "0.3"
   "NSIS-mode version")
+
 ;;;###autoload
-(setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Ii]\\)$" .
-                                 nsis-mode)) auto-mode-alist))
-;;;###autoload
-(setq auto-mode-alist (append '(("\\.\\([Nn][Ss][Hh]\\)$" .
+(setq auto-mode-alist (append '(("\\.[Nn][Ss][HhIi]\\'" .
                                  nsis-mode)) auto-mode-alist))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
