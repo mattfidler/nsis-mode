@@ -56,13 +56,24 @@ A major mode for editing nsis files
 
 @node Installation
 @section Installation
-Put this @code{nsis-mode} the load path@comma{} then add the following to your Emacs:
+If you use @code{use-package} you can add this to your init file:
 
+@example
+(use-package nsis-mode)
+@end example
+
+That's all!
+
+Else, you can install @code{nsis-mode} from Melpa via
+@code{M-x package-install}, then add the following to your Emacs:
+
+@example
+@group
 (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
 
-(setq auto-mode-alist (append '(("\.\([Nn][Ss][Ii]\)$" . nsis-mode)) auto-mode-alist))
-
-(setq auto-mode-alist (append '(("\.\([Nn][Ss][Hh]\)$" . nsis-mode)) auto-mode-alist))
+(setq auto-mode-alist (append '(("\\.[Nn][Ss][HhIi]\\'" . nsis-mode)) auto-mode-alist))
+@end group
+@end example
 
 @node History
 @section History
