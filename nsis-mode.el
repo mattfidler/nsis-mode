@@ -125,455 +125,472 @@
 ;; Keywords from HM NIS Edit source Syntax.ini and the manuals.  Added logic lib
 ;; and other libraries.
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar nsis-syntax-reserved-word
-  '(
-    "AddBrandingImage"
-    "AddSize"
-    "AllowRootDirInstall"
-    "AllowSkipFiles"
-    "AutoCloseWindow"
-    "BGFont"
-    "BGGradient"
-    "BrandingText"
-    "CRCCheck"
-    "Caption"
-    "ChangeUI"
-    "CheckBitmap"
-    "CompletedText"
-    "ComponentText"
-    "DetailsButtonText"
-    "DirText"
-    "DirVar"
-    "DirVerify"
-    "FileBufSize"
-    "FileErrorText"
-    "FunctionEnd"
-    "GetInstDirError"
-    "Icon"
-    "InstProgressFlags"
-    "InstType"
-    "InstallButtonText"
-    "InstallColors"
-    "InstallDir"
-    "InstallDirRegKey"
-    "LangString"
-    "LangStringUP"
-    "LicenseBkColor"
-    "LicenseData"
-    "LicenseForceSelection"
-    "LicenseLangString"
-    "LicenseText"
-    "LoadLanguageFile"
-    "ManifestDPIAware"
-    "ManifestSupportedOS"
-    "MiscButtonText"
-    "Name"
-    "OutFile"
-    "Page"
-    "PageCallbacks"
-    "PageEx"
-    "PageExEnd"
-    "PEDllCharacteristics"
-    "PESubsysVer"
-    "RequestExecutionLevel"
-    "Section"
-    "SectionEnd"
-    "SectionGroup"
-    "SectionGroupEnd"
-    "SectionIn"
-    "SetCompress"
-    "SetCompressionLevel"
-    "SetCompressor"
-    "SetCompressorDictSize"
-    "SetDatablockOptimize"
-    "SetDateSave"
-    "SetFont"
-    "SetOverwrite"
-    "SetPluginUnload"
-    "ShowInstDetails"
-    "ShowUninstDetails"
-    "SilentInstall"
-    "SilentUnInstall"
-    "SpaceTexts"
-    "SubCaption"
-    "Unicode"
-    "UninstPage"
-    "UninstallButtonText"
-    "UninstallCaption"
-    "UninstallIcon"
-    "UninstallSubCaption"
-    "UninstallText"
-    "VIAddVersionKey"
-    "VIFileVersion"
-    "VIProductVersion"
-    "Var"
-    "WindowIcon"
-    "XPStyle"
-    "Function"
+(eval-when-compile
+  (defvar nsis-syntax-reserved-word
+    '(
+      "AddBrandingImage"
+      "AddSize"
+      "AllowRootDirInstall"
+      "AllowSkipFiles"
+      "AutoCloseWindow"
+      "BGFont"
+      "BGGradient"
+      "BrandingText"
+      "CRCCheck"
+      "Caption"
+      "ChangeUI"
+      "CheckBitmap"
+      "CompletedText"
+      "ComponentText"
+      "DetailsButtonText"
+      "DirText"
+      "DirVar"
+      "DirVerify"
+      "FileBufSize"
+      "FileErrorText"
+      "FunctionEnd"
+      "GetInstDirError"
+      "Icon"
+      "InstProgressFlags"
+      "InstType"
+      "InstallButtonText"
+      "InstallColors"
+      "InstallDir"
+      "InstallDirRegKey"
+      "LangString"
+      "LangStringUP"
+      "LicenseBkColor"
+      "LicenseData"
+      "LicenseForceSelection"
+      "LicenseLangString"
+      "LicenseText"
+      "LoadLanguageFile"
+      "ManifestDPIAware"
+      "ManifestSupportedOS"
+      "MiscButtonText"
+      "Name"
+      "OutFile"
+      "Page"
+      "PageCallbacks"
+      "PageEx"
+      "PageExEnd"
+      "PEDllCharacteristics"
+      "PESubsysVer"
+      "RequestExecutionLevel"
+      "Section"
+      "SectionEnd"
+      "SectionGroup"
+      "SectionGroupEnd"
+      "SectionIn"
+      "SetCompress"
+      "SetCompressionLevel"
+      "SetCompressor"
+      "SetCompressorDictSize"
+      "SetDatablockOptimize"
+      "SetDateSave"
+      "SetFont"
+      "SetOverwrite"
+      "SetPluginUnload"
+      "ShowInstDetails"
+      "ShowUninstDetails"
+      "SilentInstall"
+      "SilentUnInstall"
+      "SpaceTexts"
+      "SubCaption"
+      "Unicode"
+      "UninstPage"
+      "UninstallButtonText"
+      "UninstallCaption"
+      "UninstallIcon"
+      "UninstallSubCaption"
+      "UninstallText"
+      "VIAddVersionKey"
+      "VIFileVersion"
+      "VIProductVersion"
+      "Var"
+      "WindowIcon"
+      "XPStyle"
+      "Function"
+      )
+    "Reserved Words"
     )
-  "Reserved Words"
   )
-(defvar nsis-syntax-function
-  '(
-    "Abort"
-    "BringToFront"
-    "Call"
-    "CallInstDLL"
-    "ClearErrors"
-    "CopyFiles"
-    "CreateDirectory"
-    "CreateFont"
-    "CreateShortCut"
-    "Delete"
-    "DeleteINISec"
-    "DeleteINIStr"
-    "DeleteRegKey"
-    "DeleteRegValue"
-    "DetailPrint"
-    "EnableWindow"
-    "EnumRegKey"
-    "EnumRegValue"
-    "Exch"
-    "Exec"
-    "ExecShell"
-    "ExecShellWait"
-    "ExecWait"
-    "ExpandEnvStrings"
-    "File"
-    "FileClose"
-    "FileOpen"
-    "FileRead"
-    "FileReadByte"
-    "FileSeek"
-    "FileWrite"
-    "FileWriteByte"
-    "FindClose"
-    "FindFirst"
-    "FindNext"
-    "FindWindow"
-    "FlushINI"
-    "GetCurInstType"
-    "GetCurrentAddress"
-    "GetDlgItem"
-    "GetDLLVersion"
-    "GetDLLVersionLocal"
-    "GetErrorLevel"
-    "GetFileTime"
-    "GetFileTimeLocal"
-    "GetFullPathName"
-    "GetFunctionAddress"
-    "GetLabelAddress"
-    "GetTempFileName"
-    "GetWindowText"
-    "Goto"
-    "HideWindow"
-    "IfAbort"
-    "IfErrors"
-    "IfFileExists"
-    "IfRebootFlag"
-    "IfSilent"
-    "InitPluginsDir"
-    "InstTypeGetText"
-    "InstTypeSetText"
-    "Int64Cmp"
-    "Int64CmpU"
-    "Int64Fmt"
-    "IntCmp"
-    "IntCmpU"
-    "IntFmt"
-    "IntPtrCmp"
-    "IntPtrCmpU"
-    "IntPtrOp"
-    "IntOp"
-    "IsWindow"
-    "LockWindow"
-    "LogSet"
-    "LogText"
-    "MessageBox"
-    "Nop"
-    "Pop"
-    "Push"
-    "Quit"
-    "ReadEnvStr"
-    "ReadIniStr"
-    "ReadRegDWORD"
-    "ReadRegStr"
-    "Reboot"
-    "RegDLL"
-    "Rename"
-    "ReserveFile"
-    "Return"
-    "RMDir"
-    "SearchPath"
-    "SectionGetFlags"
-    "SectionGetInstTypes"
-    "SectionGetSize"
-    "SectionGetText"
-    "SectionSetFlags"
-    "SectionSetInstTypes"
-    "SectionSetSize"
-    "SectionSetText"
-    "SendMessage"
-    "SetAutoClose"
-    "SetBrandingImage"
-    "SetCtlColors"
-    "SetCurInstType"
-    "SetDetailsPrint"
-    "SetDetailsView"
-    "SetErrorLevel"
-    "SetErrors"
-    "SetFileAttributes"
-    "SetOutPath"
-    "SetRebootFlag"
-    "SetShellVarContext"
-    "SetSilent"
-    "ShowWindow"
-    "Sleep"
-    "StrCmp"
-    "StrCpy"
-    "StrLen"
-    "UnRegDLL"
-    "WriteINIStr"
-    "WriteRegBin"
-    "WriteRegDWORD"
-    "WriteRegExpandStr"
-    "WriteRegMultiStr"
-    "WriteRegNone"
-    "WriteRegStr"
-    "WriteUninstaller"
-    )
-  "* nsis syntax function")
-(defvar nsis-syntax-directive
-  '(
-    "!addincludedir"
-    "!addplugindir"
-    "!appendfile"
-    "!cd"
-    "!define"
-    "!delfile"
-    "!echo"
-    "!error"
-    "!execute"
-    "!finalize"
-    "!getdllversion"
-    "!gettlbversion"
-    "!include"
-    "!insertmacro"
-    "!macro"
-    "!macroend"
-    "!makensis"
-    "!packhdr"
-    "!pragma"
-    "!searchparse"
-    "!searchreplace"
-    "!system"
-    "!tempfile"
-    "!undef"
-    "!verbose"
-    "!warning"
-    )
-  "nsis syntax directive")
-(defvar nsis-syntax-parameter
-  '(
-    "custom"
-    "license"
-    "components"
-    "directory"
-    "instfiles"
-    "uninstConfirm"
-    "true"
-    "false"
-    "on"
-    "off"
-    "force"
-    "show"
-    "hide"
-    "nevershow"
-    "normal"
-    "silent"
-    "silentlog"
-    "auto"
-    "zlib"
-    "bzip2"
-    "lzma"
-    "try"
-    "ifnewer"
-    "manual"
-    "alwaysoff"
-    "RO"
-    "SW_SHOWNORMAL"
-    "SW_SHOWMAXIMIZED"
-    "SW_SHOWMINIMIZED"
-    "HKCR"
-    "HKCR32"
-    "HKCR64"
-    "HKEY_CLASSES_ROOT"
-    "HKLM"
-    "HKLM32"
-    "HKLM64"
-    "HKEY_LOCAL_MACHINE"
-    "HKCU"
-    "HKCU32"
-    "HKCU64"
-    "HKEY_CURRENT_USER"
-    "HKU"
-    "HKEY_USERS"
-    "HKCC"
-    "HKEY_CURRENT_CONFIG"
-    "HKDD"
-    "HKEY_DYN_DATA"
-    "HKPD"
-    "HKEY_PERFORMANCE_DATA"
-    "SHCTX"
-    "FILE_ATTRIBUTE_NORMAL"
-    "ARCHIVE"
-    "FILE_ATTRIBUTE_ARCHIVE"
-    "HIDDEN"
-    "FILE_ATTRIBUTE_HIDDEN"
-    "OFFLINE"
-    "FILE_ATTRIBUTE_OFFLINE"
-    "READONLY"
-    "FILE_ATTRIBUTE_READONLY"
-    "SYSTEM"
-    "FILE_ATTRIBUTE_SYSTEM,TEMPORARY"
-    "FILE_ATTRIBUTE_TEMPORARY"
-    "MB_OK"
-    "MB_OKCANCEL"
-    "MB_ABORTRETRYIGNORE"
-    "MB_RETRYCANCEL"
-    "MB_YESNO"
-    "MB_YESNOCANCEL"
-    "MB_ICONEXCLAMATION"
-    "MB_ICONINFORMATION"
-    "MB_ICONQUESTION"
-    "MB_ICONSTOP"
-    "MB_TOPMOST"
-    "MB_SETFOREGROUND"
-    "MB_RIGHT"
-    "MB_DEFBUTTON1"
-    "MB_DEFBUTTON2"
-    "MB_DEFBUTTON3"
-    "MB_DEFBUTTON4"
-    "MB_RTLREADING"
-    "IDABORT"
-    "IDCANCEL"
-    "IDIGNORE"
-    "IDNO"
-    "IDOK"
-    "IDRETRY"
-    "IDYES"
-    "SW_HIDE"
-    "current"
-    "all"
-    "none"
-    "listonly"
-    "textonly"
-    "both"
-    "lastused"
-    "checkbox"
-    "radiobuttons"
-    "ifdiff"
-    "leave"
-    )
-  "* nsis parameters"
-  )
-(defvar nsis-syntax-parameter-slash
-  '(
-    "/COMPONENTSONLYONCUSTOM"
-    "/CUSTOMSTRING"
-    "/FILESONLY"
-    "/IMGID"
-    "/ITALIC"
-    "/NOCUSTOM"
-    "/NOUNLOAD"
-    "/REBOOTOK"
-    "/RESIZETOFIT"
-    "/SD"
-    "/SHORT"
-    "/SOLID"
-    "/STRIKE"
-    "/TIMEOUT"
-    "/TRIMCENTER"
-    "/TRIMLEFT"
-    "/TRIMRIGHT"
-    "/UNDERLINE"
-    "/WAIT"
-    "/a"
-    "/components"
-    "/e"
-    "/ifempty"
-    "/lang"
-    "/nonfatal"
-    "/o"
-    "/oname"
-    "/r"
-    "/silent"
-    "/windows"
-    "/x"
-    "/GRADIENT"
-    )
-  "* nsis Parameters (w/slash)")
 
-(defvar nsis-syntax-variable
-  (append
-   ;; Unlike what is in HM NIS editor, there are 20 registers, put
-   ;; them ALL in.
-   (mapcar (lambda(x) (format "$%s" x))
-           (number-sequence 0 20))
-   (mapcar (lambda(x) (format "$R%s" x))
-           (number-sequence 0 20))
-   '(
-     "$INSTDIR"
-     "$OUTDIR"
-     "$CMDLINE"
-     "$PROGRAMFILES"
-     "$PROGRAMFILES32"
-     "$PROGRAMFILES64"
-     "$DESKTOP"
-     "$EXEDIR"
-     "$EXEFILE"
-     "$EXEPATH"
-     "$WINDIR"
-     "$SYSDIR"
-     "$TEMP"
-     "$STARTMENU"
-     "$SMPROGRAMS"
-     "$SMSTARTUP"
-     "$QUICKLAUNCH"
-     "$HWNDPARENT"
-     "$LANGUAGE"
-     "$PLUGINSDIR"
-     "$COMMONFILES"
-     "$COMMONFILES32"
-     "$COMMONFILES64"
-     "$DOCUMENTS"
-     "$SENDTO"
-     "$RECENT"
-     "$FAVORITES"
-     "$MUSIC"
-     "$PICTURES"
-     "$VIDEOS"
-     "$NETHOOD"
-     "$FONTS"
-     "$TEMPLATES"
-     "$APPDATA"
-     "$LOCALAPPDATA"
-     "$PRINTHOOD"
-     "$INTERNET_CACHE"
-     "$COOKIES"
-     "$HISTORY"
-     "$PROFILE"
-     "$ADMINTOOLS"
-     "$RESOURCES"
-     "$RESOURCES_LOCALIZED"
-     "$CDBURN_AREA"
-     "$HWNDPARENT"
-     ;; Extra undefined in
-     "$nsisDIR"
-     ))
-  "* nsis syntax variables"
+(eval-when-compile
+  (defvar nsis-syntax-function
+    '(
+      "Abort"
+      "BringToFront"
+      "Call"
+      "CallInstDLL"
+      "ClearErrors"
+      "CopyFiles"
+      "CreateDirectory"
+      "CreateFont"
+      "CreateShortCut"
+      "Delete"
+      "DeleteINISec"
+      "DeleteINIStr"
+      "DeleteRegKey"
+      "DeleteRegValue"
+      "DetailPrint"
+      "EnableWindow"
+      "EnumRegKey"
+      "EnumRegValue"
+      "Exch"
+      "Exec"
+      "ExecShell"
+      "ExecShellWait"
+      "ExecWait"
+      "ExpandEnvStrings"
+      "File"
+      "FileClose"
+      "FileOpen"
+      "FileRead"
+      "FileReadByte"
+      "FileSeek"
+      "FileWrite"
+      "FileWriteByte"
+      "FindClose"
+      "FindFirst"
+      "FindNext"
+      "FindWindow"
+      "FlushINI"
+      "GetCurInstType"
+      "GetCurrentAddress"
+      "GetDlgItem"
+      "GetDLLVersion"
+      "GetDLLVersionLocal"
+      "GetErrorLevel"
+      "GetFileTime"
+      "GetFileTimeLocal"
+      "GetFullPathName"
+      "GetFunctionAddress"
+      "GetLabelAddress"
+      "GetTempFileName"
+      "GetWindowText"
+      "Goto"
+      "HideWindow"
+      "IfAbort"
+      "IfErrors"
+      "IfFileExists"
+      "IfRebootFlag"
+      "IfSilent"
+      "InitPluginsDir"
+      "InstTypeGetText"
+      "InstTypeSetText"
+      "Int64Cmp"
+      "Int64CmpU"
+      "Int64Fmt"
+      "IntCmp"
+      "IntCmpU"
+      "IntFmt"
+      "IntPtrCmp"
+      "IntPtrCmpU"
+      "IntPtrOp"
+      "IntOp"
+      "IsWindow"
+      "LockWindow"
+      "LogSet"
+      "LogText"
+      "MessageBox"
+      "Nop"
+      "Pop"
+      "Push"
+      "Quit"
+      "ReadEnvStr"
+      "ReadIniStr"
+      "ReadRegDWORD"
+      "ReadRegStr"
+      "Reboot"
+      "RegDLL"
+      "Rename"
+      "ReserveFile"
+      "Return"
+      "RMDir"
+      "SearchPath"
+      "SectionGetFlags"
+      "SectionGetInstTypes"
+      "SectionGetSize"
+      "SectionGetText"
+      "SectionSetFlags"
+      "SectionSetInstTypes"
+      "SectionSetSize"
+      "SectionSetText"
+      "SendMessage"
+      "SetAutoClose"
+      "SetBrandingImage"
+      "SetCtlColors"
+      "SetCurInstType"
+      "SetDetailsPrint"
+      "SetDetailsView"
+      "SetErrorLevel"
+      "SetErrors"
+      "SetFileAttributes"
+      "SetOutPath"
+      "SetRebootFlag"
+      "SetShellVarContext"
+      "SetSilent"
+      "ShowWindow"
+      "Sleep"
+      "StrCmp"
+      "StrCpy"
+      "StrLen"
+      "UnRegDLL"
+      "WriteINIStr"
+      "WriteRegBin"
+      "WriteRegDWORD"
+      "WriteRegExpandStr"
+      "WriteRegMultiStr"
+      "WriteRegNone"
+      "WriteRegStr"
+      "WriteUninstaller"
+      )
+    "* nsis syntax function")
   )
-(eval-when-compile 
+
+(eval-when-compile
+  (defvar nsis-syntax-directive
+    '(
+      "!addincludedir"
+      "!addplugindir"
+      "!appendfile"
+      "!cd"
+      "!define"
+      "!delfile"
+      "!echo"
+      "!error"
+      "!execute"
+      "!finalize"
+      "!getdllversion"
+      "!gettlbversion"
+      "!include"
+      "!insertmacro"
+      "!macro"
+      "!macroend"
+      "!makensis"
+      "!packhdr"
+      "!pragma"
+      "!searchparse"
+      "!searchreplace"
+      "!system"
+      "!tempfile"
+      "!undef"
+      "!verbose"
+      "!warning"
+      )
+    "nsis syntax directive")
+  )
+
+(eval-when-compile
+  (defvar nsis-syntax-parameter
+    '(
+      "custom"
+      "license"
+      "components"
+      "directory"
+      "instfiles"
+      "uninstConfirm"
+      "true"
+      "false"
+      "on"
+      "off"
+      "force"
+      "show"
+      "hide"
+      "nevershow"
+      "normal"
+      "silent"
+      "silentlog"
+      "auto"
+      "zlib"
+      "bzip2"
+      "lzma"
+      "try"
+      "ifnewer"
+      "manual"
+      "alwaysoff"
+      "RO"
+      "SW_SHOWNORMAL"
+      "SW_SHOWMAXIMIZED"
+      "SW_SHOWMINIMIZED"
+      "HKCR"
+      "HKCR32"
+      "HKCR64"
+      "HKEY_CLASSES_ROOT"
+      "HKLM"
+      "HKLM32"
+      "HKLM64"
+      "HKEY_LOCAL_MACHINE"
+      "HKCU"
+      "HKCU32"
+      "HKCU64"
+      "HKEY_CURRENT_USER"
+      "HKU"
+      "HKEY_USERS"
+      "HKCC"
+      "HKEY_CURRENT_CONFIG"
+      "HKDD"
+      "HKEY_DYN_DATA"
+      "HKPD"
+      "HKEY_PERFORMANCE_DATA"
+      "SHCTX"
+      "FILE_ATTRIBUTE_NORMAL"
+      "ARCHIVE"
+      "FILE_ATTRIBUTE_ARCHIVE"
+      "HIDDEN"
+      "FILE_ATTRIBUTE_HIDDEN"
+      "OFFLINE"
+      "FILE_ATTRIBUTE_OFFLINE"
+      "READONLY"
+      "FILE_ATTRIBUTE_READONLY"
+      "SYSTEM"
+      "FILE_ATTRIBUTE_SYSTEM,TEMPORARY"
+      "FILE_ATTRIBUTE_TEMPORARY"
+      "MB_OK"
+      "MB_OKCANCEL"
+      "MB_ABORTRETRYIGNORE"
+      "MB_RETRYCANCEL"
+      "MB_YESNO"
+      "MB_YESNOCANCEL"
+      "MB_ICONEXCLAMATION"
+      "MB_ICONINFORMATION"
+      "MB_ICONQUESTION"
+      "MB_ICONSTOP"
+      "MB_TOPMOST"
+      "MB_SETFOREGROUND"
+      "MB_RIGHT"
+      "MB_DEFBUTTON1"
+      "MB_DEFBUTTON2"
+      "MB_DEFBUTTON3"
+      "MB_DEFBUTTON4"
+      "MB_RTLREADING"
+      "IDABORT"
+      "IDCANCEL"
+      "IDIGNORE"
+      "IDNO"
+      "IDOK"
+      "IDRETRY"
+      "IDYES"
+      "SW_HIDE"
+      "current"
+      "all"
+      "none"
+      "listonly"
+      "textonly"
+      "both"
+      "lastused"
+      "checkbox"
+      "radiobuttons"
+      "ifdiff"
+      "leave"
+      )
+    "* nsis parameters"
+    )
+  )
+
+(eval-when-compile
+  (defvar nsis-syntax-parameter-slash
+    '(
+      "/COMPONENTSONLYONCUSTOM"
+      "/CUSTOMSTRING"
+      "/FILESONLY"
+      "/IMGID"
+      "/ITALIC"
+      "/NOCUSTOM"
+      "/NOUNLOAD"
+      "/REBOOTOK"
+      "/RESIZETOFIT"
+      "/SD"
+      "/SHORT"
+      "/SOLID"
+      "/STRIKE"
+      "/TIMEOUT"
+      "/TRIMCENTER"
+      "/TRIMLEFT"
+      "/TRIMRIGHT"
+      "/UNDERLINE"
+      "/WAIT"
+      "/a"
+      "/components"
+      "/e"
+      "/ifempty"
+      "/lang"
+      "/nonfatal"
+      "/o"
+      "/oname"
+      "/r"
+      "/silent"
+      "/windows"
+      "/x"
+      "/GRADIENT"
+      )
+    "* nsis Parameters (w/slash)")
+  )
+
+(eval-when-compile
+  (defvar nsis-syntax-variable
+    (append
+     ;; Unlike what is in HM NIS editor, there are 20 registers, put
+     ;; them ALL in.
+     (mapcar (lambda(x) (format "$%s" x))
+             (number-sequence 0 20))
+     (mapcar (lambda(x) (format "$R%s" x))
+             (number-sequence 0 20))
+     '(
+       "$INSTDIR"
+       "$OUTDIR"
+       "$CMDLINE"
+       "$PROGRAMFILES"
+       "$PROGRAMFILES32"
+       "$PROGRAMFILES64"
+       "$DESKTOP"
+       "$EXEDIR"
+       "$EXEFILE"
+       "$EXEPATH"
+       "$WINDIR"
+       "$SYSDIR"
+       "$TEMP"
+       "$STARTMENU"
+       "$SMPROGRAMS"
+       "$SMSTARTUP"
+       "$QUICKLAUNCH"
+       "$HWNDPARENT"
+       "$LANGUAGE"
+       "$PLUGINSDIR"
+       "$COMMONFILES"
+       "$COMMONFILES32"
+       "$COMMONFILES64"
+       "$DOCUMENTS"
+       "$SENDTO"
+       "$RECENT"
+       "$FAVORITES"
+       "$MUSIC"
+       "$PICTURES"
+       "$VIDEOS"
+       "$NETHOOD"
+       "$FONTS"
+       "$TEMPLATES"
+       "$APPDATA"
+       "$LOCALAPPDATA"
+       "$PRINTHOOD"
+       "$INTERNET_CACHE"
+       "$COOKIES"
+       "$HISTORY"
+       "$PROFILE"
+       "$ADMINTOOLS"
+       "$RESOURCES"
+       "$RESOURCES_LOCALIZED"
+       "$CDBURN_AREA"
+       "$HWNDPARENT"
+       ;; Extra undefined in
+       "$nsisDIR"
+       ))
+    "* nsis syntax variables"
+    )
+  )
+
+(eval-when-compile
   (defvar nsis-syntax-callback
     '(
       ".onGUIEnd"
@@ -668,6 +685,7 @@
     )
   "* nsis logic-lib keywords"
   )
+
 (defvar nsis-syntax-logiclib-regexp (regexp-opt nsis-syntax-logiclib t))
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other keywords from nsDialogs
@@ -728,42 +746,48 @@
     "${NSD_FreeIcon}"
     )
   "NSD Macros")
-(defvar nsis-syntax-nsd
-  '(
-    "Create"
-    "CreateControl"
-    "Show"
-    "SelectFileDialog"
-    "SelectFolderDialog"
-    "SetRTL"
-    "GetUserData"
-    "SetUserData"
-    "OnBack"
-    "OnChange"
-    "OnClick"
-    "OnNotify"
-    "CreateTimer"
-    "KillTimer"
-    )
-  "NSD functions")
-(defvar nsis-syntax-deprecated
-  '(
-    "CompareDLLVersions"
-    "CompareFileTimes"
-    "DirShow"
-    "DisabledBitmap"
-    "EnabledBitmap"
-    "GetFullDLLPath"
-    "GetParent"
-    "GetWinampInstPath"
-    "PackEXEHeader"
-    "SectionDivider"
-    "SetPluginUnload"
-    "SubSection"
-    "SubSectionEnd"
-    "UninstallExeName"
-    )
-  "* nsis syntax deprecated")
+
+(eval-when-compile
+  (defvar nsis-syntax-nsd
+    '(
+      "Create"
+      "CreateControl"
+      "Show"
+      "SelectFileDialog"
+      "SelectFolderDialog"
+      "SetRTL"
+      "GetUserData"
+      "SetUserData"
+      "OnBack"
+      "OnChange"
+      "OnClick"
+      "OnNotify"
+      "CreateTimer"
+      "KillTimer"
+      )
+    "NSD functions")
+  )
+
+(eval-when-compile
+  (defvar nsis-syntax-deprecated
+    '(
+      "CompareDLLVersions"
+      "CompareFileTimes"
+      "DirShow"
+      "DisabledBitmap"
+      "EnabledBitmap"
+      "GetFullDLLPath"
+      "GetParent"
+      "GetWinampInstPath"
+      "PackEXEHeader"
+      "SectionDivider"
+      "SetPluginUnload"
+      "SubSection"
+      "SubSectionEnd"
+      "UninstallExeName"
+      )
+    "* nsis syntax deprecated")
+  )
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Font Lock Keywords
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -811,6 +835,7 @@
 (defface nsis-font-lock-bold-function-name-face nil
   "Face for font lock bold functions"
   :group 'nsis-mode)
+
 (defface nsis-font-lock-italic-function-name-face nil
   "Face for font lock italic functions"
   :group 'nsis-mode)
@@ -835,7 +860,7 @@
   )
 
 (defun nsis-font-lock-section-quote (limit)
-  "Font Locking for section with quotes.  Puts bolds & italics on ! and - sections respectively."
+  "Font Locking for section with quotes."
   (interactive (list (point-max)))
   (condition-case error
       (progn
@@ -903,6 +928,7 @@
     (error
      (message "Font Lock Error in `nsis-font-lock-unknown-switches': %s" (error-message-string error))
      nil)))
+
 (defun nsis-font-lock-no-comment (limit expr &optional excluded-face-list)
   "Make sure that this expression does not start in a comment."
   (interactive (list (point-max) "\\([\"`']\\)\\(\\(?:\n\\|.\\)*?[$][\\\\]\\1\\)*\\(?:\n\\|.\\)*?\\1"))
@@ -972,13 +998,14 @@
            (concat "${" (substring x 1) "}"))
          nsis-syntax-variable))
        t) t  t))))
-(setq nsis-font-lock-syntactic-keywords
+
+(defvar nsis-font-lock-syntactic-keywords
       '(
         ("[$]\\([\\\\]\\)" 1 "\\")
         ("\\(/\\)[*]" 1 "<")
         ("[*]\\(/\\)" 1 ">")))
 
-(setq nsis-font-lock-keywords
+(defvar nsis-font-lock-keywords
       `(
         ;; Multi-line comment #1
         ("[/][*]\\(.\\|\n\\)*?[*][/]"
@@ -1055,32 +1082,33 @@
          (4 font-lock-string-face t)
          (5 font-lock-string-face t)
          (6 font-lock-variable-name-face t t))))
+
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Imenu
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq nsis-imenu-generic-expression
-      (eval-when-compile
-        (reverse
-         (list
-          ;; Sections
-          (list "Sections" "^[ \t]*\\<Section\\>[ \t]+\\(?:/o[ \t]+\\)?\\(\"[!-]?\\(?:.*?\\)\"\\|[!-]?\\w+\\)" 1)
+(eval-when-compile
+  (defvar nsis-imenu-generic-expression
+    (reverse
+     (list
+      ;; Sections
+      (list "Sections" "^[ \t]*\\<Section\\>[ \t]+\\(?:/o[ \t]+\\)?\\(\"[!-]?\\(?:.*?\\)\"\\|[!-]?\\w+\\)" 1)
           
-          (list "SectionGroups" "^[ \t]*\\<SectionGroup\\>[ \t]+\\(?:/e[ \t]+\\)?\\(\"[!-]?\\(?:.*?\\)\"\\|[!-]?\\w+\\)" 1)
+      (list "SectionGroups" "^[ \t]*\\<SectionGroup\\>[ \t]+\\(?:/e[ \t]+\\)?\\(\"[!-]?\\(?:.*?\\)\"\\|[!-]?\\w+\\)" 1)
           
-          (list "Functions" "^[ \t]*\\<Function\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>[^.]" 1)
+      (list "Functions" "^[ \t]*\\<Function\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>[^.]" 1)
           
-          (list "Pages" "^[ \t]*\\<\\(?:Uninstpage\\|Page\\(?:Ex\\)?\\)\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>[^.]" 1)
+      (list "Pages" "^[ \t]*\\<\\(?:Uninstpage\\|Page\\(?:Ex\\)?\\)\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>[^.]" 1)
           
-          (list "Inserted Macro" "^[ \t]*\\<!insertmacro\\>[ \t]+\\([A-Za-z][A-Za-z0-9_]*\\)" 1)
-          (list "User Variables"
-                "^[ \t]*\\<Var\\>[ \t]+\\(?:/GLOBAL[ \t]+\\)?\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>" 1)
-          (list "User Constants"
-                "^[ \t]*\\<!define\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>" 1)
-          (list "Labels"
-                "^[ \t]*\\([^-+!$0-9\n \t;#][^\n\t ]*?\\):[ \t]*\\(?:$\\|[#;]\\)" 1)
-          )))
+      (list "Inserted Macro" "^[ \t]*\\<!insertmacro\\>[ \t]+\\([A-Za-z][A-Za-z0-9_]*\\)" 1)
+      (list "User Variables"
+            "^[ \t]*\\<Var\\>[ \t]+\\(?:/GLOBAL[ \t]+\\)?\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>" 1)
+      (list "User Constants"
+            "^[ \t]*\\<!define\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>" 1)
+      (list "Labels"
+            "^[ \t]*\\([^-+!$0-9\n \t;#][^\n\t ]*?\\):[ \t]*\\(?:$\\|[#;]\\)" 1)
+      )))
                                         ;  "* Imenu list"
-      )
+  )
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; nsis mode map
@@ -1099,6 +1127,7 @@
   (define-key nsis-mode-map "\177" 'backward-delete-char-untabify)
   ;;  (define-key nsi-mode-map [C-f9] 'nsis-execute-buffer)
   )
+
 (defvar nsis-menu nil
   "Menu for Nsi Mode.
 This menu will get created automatically if you have the `easymenu'
@@ -1143,6 +1172,7 @@ package.")
       ""
       )
     ))
+
 (defun nsis-yas-description (sec desc)
   "Expands a Yasnippet of descriptions after sec and seg have been expanded."
   (let (found)
@@ -1250,7 +1280,7 @@ package.")
 
 ;; Left off at Section Management
 
-(setq nsis-yas-snippets
+(defvar nsis-yas-snippets
       '(("General Attributes"
          ( 
           "AddBrandingImage ${1:$$(yas/choose-value '(\"left\" \"right\" \"top\" \"bottom\"))} ${2:width/height} ${3:padding}"
@@ -1870,8 +1900,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 ;; Indention function
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq nsis-end-keywords
-      (eval-when-compile
+(eval-when-compile
+  (defvar nsis-end-keywords
         (replace-regexp-in-string "@" "\\<!insertmacro[ \t]+.*?END[ \t]*$"
                                   (replace-regexp-in-string "'" "\\>"
                                                             (replace-regexp-in-string "`" "\\<"
@@ -1889,10 +1919,11 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                                      "${EndWhile}"
                                                                                                      "${Next}"
                                                                                                      "${EndSwitch}")) t) nil t) nil t) nil t))
-      ;;"* Regular expression of nsis ending keywords"
-      )
-(setq nsis-start-keywords
-      (eval-when-compile
+  ;;"* Regular expression of nsis ending keywords"
+  )
+
+(eval-when-compile
+  (defvar nsis-start-keywords
         (replace-regexp-in-string "@" "\\<!insertmacro[ \t]+.*?BEGIN[ \t]*$"
                                   (replace-regexp-in-string "'" "\\>"
                                                             (replace-regexp-in-string "`" "\\<"
@@ -1914,35 +1945,36 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                                  ;;                                                                                                 "${RecFindOpen}" "${RecFindFirst}"
                                                                                                  
                                                                                                  )) t) nil t) nil t) nil t))
-      ;;"* Regular expression of nsis beginning keywords"
-      )
-(setq nsis-indent-deindent-keywords
-      (eval-when-compile
-        (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
-                                  (regexp-opt
-                                   '( "`!elseif'"
-                                      "@"
-                                      "${AndIf}" "${AndIfNot}" "${AndUnless}" "${OrIf}"
-                                      "${OrIfNot}" "${OrUnless}" "${ElseIf}" "${ElseIfNot}"
-                                      "${ElseUnless}" "${Else}" "${CaseElse}" "${Default}" "${Case2}"
-                                      "${Case3}" "${Case4}" "${Case5}" "${Case}"
-                                      ;;                                      "${RecFindNext}" "${RecFindClose}"
-                                      ) t) nil t))
-                                        ;"Regular expression of indent-deindent keywords statements for indent-deindent-keywords "
-      )
+  ;;"* Regular expression of nsis beginning keywords"
+  )
 
-(setq nsis-indent-orphans
-      (eval-when-compile
-        (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
-                                  (regexp-opt
-                                   '( "@"
-                                      "${CaseElse}" "${Default}" "${Case2}"
-                                      "${Case3}" "${Case4}" "${Case5}" "${Case}"
-                                      "${Case}"
-                                      ) t
-                                        ) nil t))
+(eval-when-compile
+  (defvar nsis-indent-deindent-keywords
+    (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
+                              (regexp-opt
+                               '( "`!elseif'"
+                                  "@"
+                                  "${AndIf}" "${AndIfNot}" "${AndUnless}" "${OrIf}"
+                                  "${OrIfNot}" "${OrUnless}" "${ElseIf}" "${ElseIfNot}"
+                                  "${ElseUnless}" "${Else}" "${CaseElse}" "${Default}" "${Case2}"
+                                  "${Case3}" "${Case4}" "${Case5}" "${Case}"
+                                  ;;                                      "${RecFindNext}" "${RecFindClose}"
+                                  ) t) nil t))
+                                        ;"Regular expression of indent-deindent keywords statements for indent-deindent-keywords "
+  )
+
+(eval-when-compile
+  (defvar nsis-indent-orphans
+    (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
+                              (regexp-opt
+                               '( "@"
+                                  "${CaseElse}" "${Default}" "${Case2}"
+                                  "${Case3}" "${Case4}" "${Case5}" "${Case}"
+                                  "${Case}"
+                                  ) t
+                               ) nil t))
                                         ;"Regular expression of indent/deindent expression that are not used to calculate the last indentation level."
-      )
+  )
 
 (defun nsis-continuation-line-p ()
   "* Is this a nsi continuation line?"
@@ -2165,7 +2197,7 @@ Returns first position.
 (require 'hideshow)
 
 ;; TODO:  Add labels folding.
-(setq nsis-hs-start (concat "^[ \t]*" nsis-start-keywords)
+(defvar nsis-hs-start (concat "^[ \t]*" nsis-start-keywords)
       ;;"* Esn Hide-show start regular expression"
       )
 
