@@ -112,7 +112,7 @@
 ;;; Code:
 
 (require 'font-lock)
-(require 'cl)
+(require 'cl-lib)
 
 (defvar nsis-version "0.3"
   "NSIS-mode version")
@@ -1163,10 +1163,10 @@ package.")
 
 (defun nsis-yas-desc (secn descn)
   "Yasnippet check for description update.  For use with `nsis-yas-description'"
-  (unless (or yas/moving-away-p yas/modified-p)
+  (unless (or yas-moving-away-p yas-modified-p)
     (let (
-          (sec (nsis-yas-sec (yas/field-value secn)))
-          (desc (yas/field-value descn))
+          (sec (nsis-yas-sec (yas-field-value secn)))
+          (desc (yas-field-value descn))
           )
       (run-with-timer 0.25 nil `(lambda() (interactive) (nsis-yas-description ,sec ,desc)))
       ""
@@ -1176,7 +1176,7 @@ package.")
 (defun nsis-yas-description (sec desc)
   "Expands a Yasnippet of descriptions after sec and seg have been expanded."
   (let (found)
-    (yas/exit-all-snippets)
+    (yas-exit-all-snippets)
     (save-excursion
       (goto-char (point-max))
       (while (re-search-backward "^[ \t]*LangString" nil t)
@@ -1206,14 +1206,14 @@ package.")
 
 (defun nsis-yas-q ( &optional txt)
   "Yasnippet quote transform"
-  (let ((ret yas/text))
+  (let ((ret yas-text))
     (if (not (and ret (or (< 0 (length ret)) (string-match "^[ \t]$" ret))))
         (setq ret "")
       (setq ret (or txt"\"")))))
 
 (defun nsis-yas-sec (&optional txt)
   "Yasnippet section transform"
-  (let ((ret (or txt yas/text)))
+  (let ((ret (or txt yas-text)))
     (while (string-match "[^A-Za-z0-9_]" ret)
       (setq ret (replace-match "_" nil t ret))
       )
@@ -1228,7 +1228,7 @@ package.")
 
 (defun nsis-yas-hidden-bold ()
   "Yasnippet section transform"
-  (let ((ret yas/text))
+  (let ((ret yas-text))
     (if (not (and ret (< 0 (length ret))))
         (setq ret "")
       (setq ret (substring ret 0 1))
@@ -1283,29 +1283,29 @@ package.")
 (defvar nsis-yas-snippets
       '(("General Attributes"
          ( 
-          "AddBrandingImage ${1:$$(yas/choose-value '(\"left\" \"right\" \"top\" \"bottom\"))} ${2:width/height} ${3:padding}"
-          "AllowRootDirInstall ${1:$$(yas/choose-value '(\"true\" \"false\"))}"
-          "AutoCloseWindow ${1:$$(yas/choose-value '(\"true\" \"false\"))}"
+          "AddBrandingImage ${1:$$(yas-choose-value '(\"left\" \"right\" \"top\" \"bottom\"))} ${2:width/height} ${3:padding}"
+          "AllowRootDirInstall ${1:$$(yas-choose-value '(\"true\" \"false\"))}"
+          "AutoCloseWindow ${1:$$(yas-choose-value '(\"true\" \"false\"))}"
           "BGFont \"${1:Times New Roman}\"${2: ${3:12} ${4:/ITALIC} ${5:/UNDERLINE} ${6:/STRIKE}}"
           ;;                           BGGradient [off|(topc botc [textcolor|notext])]
-          "BrandingText${1: /TRIM${2:$$(yas/choose-value '(\"LEFT\" \"RIGHT\" \"CENTER\"))}} \"$3\""
+          "BrandingText${1: /TRIM${2:$$(yas-choose-value '(\"LEFT\" \"RIGHT\" \"CENTER\"))}} \"$3\""
           "Caption \"$1\""
           ;; ChangeUI
           "CheckBitmap \"$1.bmp\""
           "CompletedText \"$1\""
           "ComponentText \"${1:Text above Controls}\" ${2:$(nsis-yas-q)}${2:Text next to installation type$(yas/ma \"\")}${2:$(nsis-yas-q)}"
-          "CRCCheck ${1:$$(yas/choose-value '(\"on\" \"off\" \"force\"))}"
+          "CRCCheck ${1:$$(yas-choose-value '(\"on\" \"off\" \"force\"))}"
           "DetailsButtonText \"$1\""
           "DirText \"${1:text}\"${2: \"${3:subtext}\"${4: \"${5:browse_button_text}\"${6: \"$7\"}}}"
           ;;DirVar
-          "DirVerify ${1:$$(yas/choose-value '(\"auto\" \"leave\"))}"
+          "DirVerify ${1:$$(yas-choose-value '(\"auto\" \"leave\"))}"
           "FileErrorText \"$1\""
           "Icon $1"
           "InstallButtonText \"$1\""
           ;;InstallColors /windows | (foreground_color background_color)
           "InstallDir \"$1\""
           "InstallDirRegKey HKLM \"Software\\\\$1\" \"${2:KeyName}\""
-          "InstProgressFlags ${1:$$(yas/choose-value '(\"smooth\" \"colored\" \"smooth colored\"))}"
+          "InstProgressFlags ${1:$$(yas-choose-value '(\"smooth\" \"colored\" \"smooth colored\"))}"
           "InstType \"$1\"${2: /NOCUSTOM}${3: /CUSTOMSTRING=\"${4:str}\"}${5: /COMPONENTSONLYONCUSTOM}"
           ;; LicenseBkColor color | /gray | /windows
           "LicenseData \"${1:licdata.(txt|rtf)}\""
@@ -1314,36 +1314,36 @@ package.")
           "Name \"${1:name_doubled_ampersands}\""
           "OutFile \"${1:install.exe}\""
           "PEDllCharacteristics ${1:addbits} ${2:removebits}"
-          "RequestExecutionLevel ${1:$$(yas/choose-value '(\"none\" \"user\" \"highest\" \"admin\"))}"
+          "RequestExecutionLevel ${1:$$(yas-choose-value '(\"none\" \"user\" \"highest\" \"admin\"))}"
           "SetFont${1: /LANG=${2:LANGUAGE_ID}} \"${3:font_face_name}\" ${4:font_size}"
-          "ShowInstDetails ${1:$$(yas/choose-value '(\"hide\" \"show\" \"nevershow\"))}"
-          "ShowUninstDetails ${1:$$(yas/choose-value '(\"hide\" \"show\" \"nevershow\"))}"
-          "SilentInstall ${1:$$(yas/choose-value '(\"normal\" \"silent\" \"silentlog\"))}"
-          "SilentUnInstall ${1:$$(yas/choose-value '(\"normal\" \"silent\"))}"
+          "ShowInstDetails ${1:$$(yas-choose-value '(\"hide\" \"show\" \"nevershow\"))}"
+          "ShowUninstDetails ${1:$$(yas-choose-value '(\"hide\" \"show\" \"nevershow\"))}"
+          "SilentInstall ${1:$$(yas-choose-value '(\"normal\" \"silent\" \"silentlog\"))}"
+          "SilentUnInstall ${1:$$(yas-choose-value '(\"normal\" \"silent\"))}"
           "SpaceTexts \"${1:Space Required Test}\" ${2:$(nsis-yas-q)}${2:Space Available Text$(yas/ma \"\")}${2:$(nsis-yas-q)}"
-          "SubCaption ${1:$(cond ((string= text \"License Agreement\") \"0\") ((string= text \"Installation Options\") \"1\") ((string= text \"Installation Directory\") \"2\")  ((string= text \"Installing Files\") \"3\")  ((string= text \"Completed\") \"4\") (t \"\"))} \"${2:subcaption}\" ; Changing ${1:$$(yas/choose-value '(\"License Agreement\" \"Installation Options\" \"Installation Directory\" \"Installing Files\" \"Completed\"))} Text"
+          "SubCaption ${1:$(cond ((string= text \"License Agreement\") \"0\") ((string= text \"Installation Options\") \"1\") ((string= text \"Installation Directory\") \"2\")  ((string= text \"Installing Files\") \"3\")  ((string= text \"Completed\") \"4\") (t \"\"))} \"${2:subcaption}\" ; Changing ${1:$$(yas-choose-value '(\"License Agreement\" \"Installation Options\" \"Installation Directory\" \"Installing Files\" \"Completed\"))} Text"
           "UninstallButtonText \"${1:Text}\""
           "UninstallCaption \"${1:caption}\""
-          "UninstallSubCaption ${1:$(cond ((string= text \"Confirmation\") \"0\") ((string= text \"Uninstalling Files\") \"1\") ((string= text Completed\") \"2\") (t \"\"))} \"${2:subcaption}\" ; Changing ${1:$$(yas/choose-value '(\"Confirmation\" \"Uninstalling Files\" \"Completed\"))} Text"
+          "UninstallSubCaption ${1:$(cond ((string= text \"Confirmation\") \"0\") ((string= text \"Uninstalling Files\") \"1\") ((string= text Completed\") \"2\") (t \"\"))} \"${2:subcaption}\" ; Changing ${1:$$(yas-choose-value '(\"Confirmation\" \"Uninstalling Files\" \"Completed\"))} Text"
           "UninstallText \"${1:text}\" ${2:$(nsis-yas-q)}${2:subtext$(yas/ma \"\")}${2:$(nsis-yas-q)}"
-          "WindowIcon ${1:$$(yas/choose-value '(\"on\" \"off\"))}"
-          "XPStyle ${1:$$(yas/choose-value '(\"on\" \"off\"))}"
+          "WindowIcon ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
+          "XPStyle ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
           ))
         ("Compiler Flags"
          (
-          "AllowSkipFiles ${1:$$(yas/choose-value '(\"on\" \"off\"))}"
+          "AllowSkipFiles ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
           "FileBufSize ${1:buffer_size_in_mb}"
-          "SetCompress ${1:$$(yas/choose-value '(\"auto\" \"force\" \"off\"))}"
-          "SetCompressor${1: /SOLID}${2: /FINAL}${3:$$(yas/choose-value '(\"zlib\" \"bzip2\" \"lzma\"))}"
+          "SetCompress ${1:$$(yas-choose-value '(\"auto\" \"force\" \"off\"))}"
+          "SetCompressor${1: /SOLID}${2: /FINAL}${3:$$(yas-choose-value '(\"zlib\" \"bzip2\" \"lzma\"))}"
           "SetCompressorDictSize ${1:dict_size_mb}"
-          "SetDatablockOptimize ${1:$$(yas/choose-value '(\"on\" \"off\"))}"
-          "SetDateSave ${1:$$(yas/choose-value '(\"on\" \"off\"))}"
-          "SetOverwrite ${1:$$(yas/choose-value '(\"on\" \"off\" \"try\" \"ifnewer\" \"ifdiff\" \"lastused\"))}"
+          "SetDatablockOptimize ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
+          "SetDateSave ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
+          "SetOverwrite ${1:$$(yas-choose-value '(\"on\" \"off\" \"try\" \"ifnewer\" \"ifdiff\" \"lastused\"))}"
           ))
         ("Version Information"
          (
           "PESubsysVer ${1:major}.${2:minor}"
-          "VIAddVersionKey${1: /LANG=${2:lang_id}} \"${3:$$(yas/choose-value '(\"ProductName\" \"Comments\" \"CompanyName\" \"LegalCopyright\" \"FileDescription\" \"FileVersion\" \"ProductVersion\" \"InternalName\" \"LegalTrademarks\" \"OriginalFilename\" \"PrivateBuild\" \"SpecialBuild\"))}\" \"${4:value}\""
+          "VIAddVersionKey${1: /LANG=${2:lang_id}} \"${3:$$(yas-choose-value '(\"ProductName\" \"Comments\" \"CompanyName\" \"LegalCopyright\" \"FileDescription\" \"FileVersion\" \"ProductVersion\" \"InternalName\" \"LegalTrademarks\" \"OriginalFilename\" \"PrivateBuild\" \"SpecialBuild\"))}\" \"${4:value}\""
           "VIFileVersion ${1:version_string_X.X.X.X}"
           "VIProductVersion \"${1:`(format-time-string \"%h\")`}.${2:`(format-time-string \"%d\")`}.${3:`(format-time-string \"%m\")`}.{4:`(format-time-string \"%Y\")`}\""
           ))
@@ -1351,7 +1351,7 @@ package.")
          (
           "Delete ${1: /REBOOTOK} \"${2:file}\""
           "Exec '${1:command}'"
-          "ExecShell \"${1:action}\" \"${1:command}\" ${2:$(nsis-yas-q)}${2:parameters$(yas/ma \"\")}${2:$(nsis-yas-q)} ${3:$$(yas/choose-value '(\"\" \"SW_SHOWDEFAULT\" \"SW_SHOWNORMAL\" \"SW_SHOWMAXIMIZED\" \"SW_SHOWMINIMIZED\" \"SW_HIDE\"))}"
+          "ExecShell \"${1:action}\" \"${1:command}\" ${2:$(nsis-yas-q)}${2:parameters$(yas/ma \"\")}${2:$(nsis-yas-q)} ${3:$$(yas-choose-value '(\"\" \"SW_SHOWDEFAULT\" \"SW_SHOWNORMAL\" \"SW_SHOWMAXIMIZED\" \"SW_SHOWMINIMIZED\" \"SW_HIDE\"))}"
           "ExpandEnvStrings \\$${1:user_var(output)} \"${2:string}\" ; Env strings coded %ENV%"
           "ReadEnvStr \\$${1:user_var(output)} ${2:environemnt name}"
           "SearchPath \\$${1:user_var(output)} '${2:filename}' ; Look for file in search %PATH%"
@@ -1371,12 +1371,12 @@ package.")
           "GetFileTimeLocal '${1:filename}' \\$${1:user_var(high dword output)} \\$${2:user_var(low dword output)}"
           "GetFullPathName${1: /SHORT} \\$${2:user_var(output)} '${3:path_or_file}"
           "GetTempFileName \\$${1:user_var(output)} ${2:base_dir}"
-          "SetFileAttributes '${1:filename}' ${2:$$(yas/choose-value '(\"NORMAL\" \"ARCHIVE\" \"HIDDEN\" \"OFFLINE\" \"READONLY\" \"SYSTEM\" \"TEMPORARY\"))}"
+          "SetFileAttributes '${1:filename}' ${2:$$(yas-choose-value '(\"NORMAL\" \"ARCHIVE\" \"HIDDEN\" \"OFFLINE\" \"READONLY\" \"SYSTEM\" \"TEMPORARY\"))}"
           "FileClose \\$${1:handle}"
-          "FileOpen \\$${1:handle} '${2:file}' ${3:$$(yas/choose-value '(\"r; open read-only\" \"w ; overwrite\" \"a; append or read\"))}"
+          "FileOpen \\$${1:handle} '${2:file}' ${3:$$(yas-choose-value '(\"r; open read-only\" \"w ; overwrite\" \"a; append or read\"))}"
           "FileRead \\$${1:handle} \\$${2:user_var(output)}"
           "FileReadByte \\$${1:handle}"
-          "FileSeek \\$${1:handle} ${2:offset} ${3:$$(yas/choose-value '(\"SET\" \"CUR\" \"END\"))} ${4:$(nsis-yas-q \"$\")}${4:new position$(yas/ma \"\")}"
+          "FileSeek \\$${1:handle} ${2:offset} ${3:$$(yas-choose-value '(\"SET\" \"CUR\" \"END\"))} ${4:$(nsis-yas-q \"$\")}${4:new position$(yas/ma \"\")}"
           "FileWrite \\$${1:handle} \"${2:string}\""
           "FileWriteByte \\$${1:handle} \"${2:Integer of Byte}\""
           "FindFirst \\$${1:user_var(handle output)} \$${2:user_var(filename output)} '${3:filespec}'"
@@ -1434,10 +1434,10 @@ package.")
           "GetInstDirError \\$${1:user_var(error level output)}"
           ;;InitPluginsDir, Nop,
           "SetErrorLevel ${1:error_level}"
-          "SetShellVarContext ${1:$$(yas/choose-value '(\"current\" \"all\"))}"
+          "SetShellVarContext ${1:$$(yas-choose-value '(\"current\" \"all\"))}"
           "Sleep ${1:sleeptime_in_ms}"
-          "SetRebootFlag ${1:$$(yas/choose-value '(\"true\" \"false\"))}"
-          "LogSet ${1:$$(yas/choose-value '(\"on\" \"off\"))}"
+          "SetRebootFlag ${1:$$(yas-choose-value '(\"true\" \"false\"))}"
+          "LogSet ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
           "LogText '${1:Log Text}'"
           
           )
@@ -1614,14 +1614,14 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       )
 
 (defun nsis-yas ()
-  "Generates some Yasnippet templates and puts them in the appropriate directory"
+  "Generate some Yasnippet templates and put them in the appropriate directory."
   (interactive)
   (require 'yasnippet nil t)
-  (when (boundp 'yas/root-directory)
+  (when (boundp 'yas-snippet-dirs)
     (let (
-          (new-dir (if (eq (type-of 'yas/root-directory) 'symbol)
-                       yas/root-directory
-                     (nth 0 yas/root-directory)
+          (new-dir (if (listp yas-snippet-dirs)
+                       (nth 0 yas-snippet-dirs)
+                       yas-snippet-dirs
                      ))
           (debug-on-error t)
           added-snippets
@@ -1629,7 +1629,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
           atfile
           snippet-list
           )
-      (setq new-dir (concat new-dir "nsis-mode/"))
+      (setq new-dir (concat new-dir "/nsis-mode/"))
       (unless (file-exists-p new-dir)
         (make-directory new-dir 't)
         )
@@ -1909,7 +1909,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                                    (mapcar (lambda(x)
                                                                                                              (concat "`" x "'")
                                                                                                              )
-                                                                                                           (remove-if-not (lambda(x) (string-match "End$" x))
+                                                                                                           (cl-remove-if-not (lambda(x) (string-match "End$" x))
                                                                                                                           nsis-syntax-reserved-word))
                                                                                                    '("`!endif'" "`!macroend'" "${EndIf}"
                                                                                                      "${EndSelect}" "${LoopWhile}"
@@ -1930,7 +1930,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                       (regexp-opt
                                                                                        
                                                                                        (append (mapcar (lambda(x) (concat "`" (substring x 0 -3) "'"))
-                                                                                                       (remove-if-not (lambda(x) (string-match "End$" x))
+                                                                                                       (cl-remove-if-not (lambda(x) (string-match "End$" x))
                                                                                                                       nsis-syntax-reserved-word))
                                                                                                '("`!if'" "`!ifdef'" "`!ifndef'"
                                                                                                  "`!ifmacrodef'"
