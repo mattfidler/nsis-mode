@@ -20,72 +20,72 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;; 
+;;
 ;; A major mode for editing nsis files
-;; 
+;;
 ;; * Installation
-;; 
+;;
 ;; Put nsis-mode on your load-path, then add the following to your Emacs:
-;; 
+;;
 ;;  (autoload 'nsis-mode "nsis-mode" "NSIS mode" t)
-;; 
+;;
 ;;  (setq auto-mode-alist (append '(("\\.[Nn][Ss][HhIi]\\'" .
 ;;                                   nsis-mode)) auto-mode-alist))
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
 ;; 08-Jul-2013    Jan T. Sott
 ;;    Last-Updated: Mon Jul 08 21:05:17 2013 (+0100) #1476 (Jan T. Sott)
 ;;    Added new NSIS 3.0a0 commands, sorted command list
-;; 20-Aug-2012    Matthew L. Fidler  
+;; 20-Aug-2012    Matthew L. Fidler
 ;;    Last-Updated: Mon Aug 20 13:08:06 2012 (-0500) #1476 (Matthew L. Fidler)
 ;;    Added nsis-indent-level to allow customization of indentation.
-;; 08-Jun-2012    Matthew L. Fidler  
+;; 08-Jun-2012    Matthew L. Fidler
 ;;    Last-Updated: Fri Jun  8 09:57:12 2012 (-0500) #1468 (Matthew L. Fidler)
 ;;    Changed _ to syntax class
-;; 16-May-2012    Matthew L. Fidler  
+;; 16-May-2012    Matthew L. Fidler
 ;;    Last-Updated: Wed May 16 16:10:18 2012 (-0500) #1463 (Matthew L. Fidler)
 ;;    Added label indentation support for labels of the form "label_${ONE}:"
-;; 16-May-2012    Matthew L. Fidler  
+;; 16-May-2012    Matthew L. Fidler
 ;;    Last-Updated: Wed May 16 13:56:32 2012 (-0500) #1457 (Matthew L. Fidler)
 ;;    Fixed random hang
-;; 16-May-2012    Matthew L. Fidler  
+;; 16-May-2012    Matthew L. Fidler
 ;;    Last-Updated: Wed May 16 13:42:34 2012 (-0500) #1454 (Matthew L. Fidler)
 ;;    Attempted to fix random hangs.  It could be due to indentation
 ;;    infinite loop, so made sure (bobp) is always checked at the
 ;;    beginning of the line.
-;; 01-Mar-2012    Matthew L. Fidler  
+;; 01-Mar-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 14:49:14 2012 (-0600) #1450 (Matthew L. Fidler)
 ;;    Added website.
-;; 01-Mar-2012    Matthew L. Fidler  
+;; 01-Mar-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 14:49:14 2012 (-0600) #1450 (Matthew L. Fidler)
 ;;    Bug fix for syntax table.
-;; 19-Dec-2011    Matthew L. Fidler  
+;; 19-Dec-2011    Matthew L. Fidler
 ;;    Last-Updated: Mon Dec 19 09:23:37 2011 (-0600) #1441 (Matthew L. Fidler)
 ;;    Looks for makensis if can't find in program files.
-;; 19-Dec-2011    Matthew L. Fidler  
+;; 19-Dec-2011    Matthew L. Fidler
 ;;    Last-Updated: Mon Nov 21 10:00:35 2011 (-0600) #1440 (Matthew L. Fidler)
 ;;    Added .nsi and .nsh autoload
-;; 07-Feb-2011    Matthew L. Fidler  
+;; 07-Feb-2011    Matthew L. Fidler
 ;;    Last-Updated: Mon Feb  7 11:03:14 2011 (-0600) #1413 (Matthew L. Fidler)
 ;;    Added check to make sure compile went OK before launching executable.
-;; 25-Jan-2011    Matthew L. Fidler  
+;; 25-Jan-2011    Matthew L. Fidler
 ;;    Last-Updated: Tue Jan 18 14:31:23 2011 (-0600) #1410 (us041375)
 ;;    Added more explicit setup instructions
-;; 06-Dec-2010    Matthew L. Fidler  
+;; 06-Dec-2010    Matthew L. Fidler
 ;;    Last-Updated: Mon Dec  6 19:11:01 2010 (-0600) #1408 (Matthew L. Fidler)
 ;;    Changed comment start and comment stop to single line semi-colons
-;; 06-Dec-2010    Matthew L. Fidler  
+;; 06-Dec-2010    Matthew L. Fidler
 ;;    Last-Updated: Mon Dec  6 09:05:34 2010 (-0600) #1404 (Matthew L. Fidler)
 ;;    Made nsis-yas-description not depend on finding MUI_FUNCTION_DESCRIPTION_BEGIN.  If MUI_DESCRIPTION_TEXT is found, insert there.
-;; 06-Dec-2010    Matthew L. Fidler  
+;; 06-Dec-2010    Matthew L. Fidler
 ;;    Last-Updated: Mon Dec  6 09:05:06 2010 (-0600) #1403 (Matthew L. Fidler)
 ;;    Updated indentation line function (bug-fix)
-;; 23-Nov-2010    Matthew L. Fidler  
+;; 23-Nov-2010    Matthew L. Fidler
 ;;    Last-Updated: Tue Nov 23 08:49:52 2010 (-0600) #1288 (Matthew L. Fidler)
 ;;    Macros that end with END or BEGIN are indentation keywords.
-;; 23-Nov-2010      
+;; 23-Nov-2010
 ;;    Last-Updated: Tue Nov 23 08:19:48 2010 (-0600) #1277 (Matthew L. Fidler)
 ;;    Changed indentation routine (bugfix)
 ;;
@@ -115,11 +115,77 @@
 (require 'cl-lib)
 
 (defvar nsis-version "0.3"
-  "NSIS-mode version")
+  "NSIS-mode version.")
 
 ;;;###autoload
 (setq auto-mode-alist (append '(("\\.[Nn][Ss][HhIi]\\'" .
                                  nsis-mode)) auto-mode-alist))
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; nsis customizable variables
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgroup nsis-mode nil
+  "NSIS -- Yet another NSI-editing mode, www.nsi.org."
+  :group 'languages)
+
+(defcustom nsis-indent-level 2
+  "Indentation level for `nsis-mode'."
+  :type 'integer
+  :group 'nsis-mode)
+
+(defcustom nsis-nsis-manual-file
+  (let ((nsis (concat (getenv "ProgramFiles")
+                      "/nsis/nsis.chm"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+                       "/nsis/nsis.chm")))
+    (if (file-exists-p nsis) nsis
+      (if (file-exists-p nsis2) nsis2
+	"nsis.chm")))
+  "NSIS help file."
+  :type 'file
+  :group 'nsis-mode)
+
+(defcustom nsis-nsis-menu-file
+  (let ((nsis (concat (getenv "ProgramFiles")
+                      "/nsis/nsis.exe"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+                       "/nsis/nsis.exe")))
+    (if (file-exists-p nsis) nsis
+        (if (file-exists-p nsis2) nsis2
+	  "nsis")))
+  "NSIS Menu File."
+  :type 'file
+  :group 'nsis-mode)
+
+(defcustom nsis-makensis-windows-command
+  (let ((nsis (concat (getenv "ProgramFiles")
+                      "/nsis/makensisw.exe"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+		       "/nsis/makensisw.exe")))
+    (if (file-exists-p nsis) nsis
+      (if (file-exists-p nsis2) nsis2
+	(executable-find "makensisw"))))
+  "NSIS-mode windows command."
+  :type 'file
+  :group 'nsis-mode)
+
+(defcustom nsis-makensis-command
+  (let ((nsis (concat (getenv "ProgramFiles")
+                      "/nsis/makensis.exe"))
+	(nsis2 (concat (getenv "ProgramFiles(x86)")
+                      "/nsis/makensis.exe")))
+    (if (file-exists-p nsis) nsis
+      (if (file-exists-p nsis2) nsis2
+	(executable-find "makensis"))))
+  "NSIS-mode command prompt."
+  :type 'file
+  :group 'nsis-mode)
+
+(defcustom nsis-run-nsis-async t
+  "Run Nsis asynchronously if non nil."
+  :type 'boolean
+  :group 'nsis-mode)
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keywords from HM NIS Edit source Syntax.ini and the manuals.  Added logic lib
@@ -148,6 +214,7 @@
       "DirVerify"
       "FileBufSize"
       "FileErrorText"
+      "Function"
       "FunctionEnd"
       "GetInstDirError"
       "Icon"
@@ -166,22 +233,26 @@
       "LicenseText"
       "LoadLanguageFile"
       "ManifestDPIAware"
+      "ManifestLongPathAware"
       "ManifestSupportedOS"
       "MiscButtonText"
       "Name"
       "OutFile"
+      "PEAddResource"
+      "PEDllCharacteristics"
+      "PERemoveResource"
+      "PESubsysVer"
       "Page"
       "PageCallbacks"
       "PageEx"
       "PageExEnd"
-      "PEDllCharacteristics"
-      "PESubsysVer"
       "RequestExecutionLevel"
       "Section"
       "SectionEnd"
       "SectionGroup"
       "SectionGroupEnd"
       "SectionIn"
+      "SectionInstType"
       "SetCompress"
       "SetCompressionLevel"
       "SetCompressor"
@@ -210,7 +281,6 @@
       "Var"
       "WindowIcon"
       "XPStyle"
-      "Function"
       )
     "Reserved Words"
     )
@@ -345,6 +415,12 @@
       "WriteRegNone"
       "WriteRegStr"
       "WriteUninstaller"
+
+      "GetKnownFolderPath"
+      "GetWinVer"
+      "IfRtlLanguage"
+      "IfShellVarContextAll"
+      "LoadAndSetImage"
       )
     "* nsis syntax function")
   )
@@ -359,11 +435,19 @@
       "!define"
       "!delfile"
       "!echo"
+      "!else"
+      "!elseif"
+      "!endif"
       "!error"
       "!execute"
       "!finalize"
       "!getdllversion"
       "!gettlbversion"
+      "!if"
+      "!ifdef"
+      "!ifmacrodef"
+      "!ifmacrondef"
+      "!ifndef"
       "!include"
       "!insertmacro"
       "!macro"
@@ -376,10 +460,11 @@
       "!system"
       "!tempfile"
       "!undef"
+      "!uninstfinalize"
       "!verbose"
       "!warning"
       )
-    "nsis syntax directive")
+    "NSIS syntax directive")
   )
 
 (eval-when-compile
@@ -492,17 +577,37 @@
 (eval-when-compile
   (defvar nsis-syntax-parameter-slash
     '(
+      "/BOM"
+      "/BRANDING"
       "/COMPONENTSONLYONCUSTOM"
       "/CUSTOMSTRING"
+      "/ENABLECANCEL"
+      "/EXERESOURCE"
       "/FILESONLY"
+      "/FINAL"
+      "/GETDLGITEM"
+      "/GLOBAL"
+      "/GRADIENT"
       "/IMGID"
       "/ITALIC"
+      "/LANG"
+      "/NOBOM"
       "/NOCUSTOM"
+      "/NOERRORS"
       "/NOUNLOAD"
+      "/NoWorkingDir"
+      "/OVERWRITE"
+      "/ProductVersion"
       "/REBOOTOK"
+      "/REGEDIT5"
+      "/REPLACE"
+      "/RESET"
       "/RESIZETOFIT"
+      "/RESIZETOFITHEIGHT"
+      "/RESIZETOFITWIDTH"
       "/SD"
       "/SHORT"
+      "/SILENT"
       "/SOLID"
       "/STRIKE"
       "/TIMEOUT"
@@ -514,16 +619,20 @@
       "/a"
       "/components"
       "/e"
+      "/gray"
+      "/grey"
       "/ifempty"
+      "/ifnosubkeys"
+      "/ifnovalues"
       "/lang"
       "/nonfatal"
       "/o"
       "/oname"
+      "/plugin"
       "/r"
       "/silent"
       "/windows"
       "/x"
-      "/GRADIENT"
       )
     "* nsis Parameters (w/slash)")
   )
@@ -583,8 +692,19 @@
        "$RESOURCES_LOCALIZED"
        "$CDBURN_AREA"
        "$HWNDPARENT"
+       "$COMMON"
+       "$COMMONDESKTOP"
+       "$COMMONPROGRAMDATA"
+       "$COMMONSMPROGRAMS"
+       "$COMMONSTARTMENU"
+       "$COMMONTEMPLATES"
+       "$USER"
+       "$USERDESKTOP"
+       "$USERSMPROGRAMS"
+       "$USERSTARTMENU"
+       "$USERTEMPLATES"
        ;; Extra undefined in
-       "$nsisDIR"
+       "$nsisDIR"    
        ))
     "* nsis syntax variables"
     )
@@ -611,7 +731,7 @@
       "un.onUninstSuccess"
       "un.onUserAbort"
       )
-    "nsis callback syntax"))
+    "NSIS callback syntax"))
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Other Keywords from Logic Lib
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -683,7 +803,7 @@
     "S=="
     "U<"
     )
-  "* nsis logic-lib keywords"
+  "* nsis logic-lib keywords."
   )
 
 (defvar nsis-syntax-logiclib-regexp (regexp-opt nsis-syntax-logiclib t))
@@ -745,7 +865,7 @@
     "${NSD_FreeImage}"
     "${NSD_FreeIcon}"
     )
-  "NSD Macros")
+  "NSD Macros.")
 
 (eval-when-compile
   (defvar nsis-syntax-nsd
@@ -793,7 +913,7 @@
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun nsis-font-lock-extend-region-continue ()
-  "Extends region for multi-line matches, and multi-line comments"
+  "Extend region for multi-line matches, and multi-line comments."
   (interactive)
   (condition-case error
       (progn
@@ -833,15 +953,15 @@
   :group 'nsis-mode)
 
 (defface nsis-font-lock-bold-function-name-face nil
-  "Face for font lock bold functions"
+  "Face for font lock bold functions."
   :group 'nsis-mode)
 
 (defface nsis-font-lock-italic-function-name-face nil
-  "Face for font lock italic functions"
+  "Face for font lock italic functions."
   :group 'nsis-mode)
 
 (defun nsis-construct-faces ()
-  "* Construct modified faces"
+  "* Construct modified faces."
   (copy-face 'font-lock-string-face 'nsis-font-lock-bold-string-face)
   (set-face-attribute 'nsis-font-lock-bold-string-face nil
                       :weight 'bold)
@@ -883,7 +1003,7 @@
      nil)))
 
 (defun nsis-font-lock-section-no-quote (limit)
-  "Font locking for section without quotes"
+  "Font locking for section without quotes."
   (interactive (list (point-max)))
   (condition-case error
       (progn
@@ -916,7 +1036,7 @@
      nil)))
 
 (defun nsis-font-lock-unknown-switches (limit)
-  "nsis font lock unknown switches"
+  "NSIS font lock unknown switches."
   (interactive (list (point-max)))
   (condition-case error
       (progn
@@ -968,8 +1088,8 @@
   (nsis-font-lock-no-comment limit "\\([\"`']\\)\\(\\(?:\n\\|.\\)*?[$][\\\\]\\1\\)*\\(?:\n\\|.\\)*?\\1"))
 
 (defun nsis-font-lock-syntax-variable (limit)
-  "Font lock of syntax variable -- not allowed in comments"
-  (interactive (list (point-max)))  
+  "Font lock of syntax variable -- not allowed in comments."
+  (interactive (list (point-max)))
   (nsis-font-lock-no-comment
    limit
    (eval-when-compile
@@ -1033,7 +1153,7 @@
          (3 font-lock-variable-name-face))
         ("^[ \t]*\\([^-+!$0-9\n \t;#][^ \t\n]*?:\\)[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)" ;
          (1 font-lock-type-face))
-        
+
         ("\\<\\(Var\\|!define\\)\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>"
          (1 font-lock-builtin-face)
          (2 font-lock-variable-name-face))
@@ -1044,13 +1164,13 @@
          (0 font-lock-keyword-face t))
         ("$\\([A-Za-z_][A-Za-z0-9_]*\\>\\|{[A-Za-z_][A-Za-z0-9_]*}\\)"
          (0 font-lock-variable-name-face t))
-        
+
         (nsis-font-lock-unknown-switches )
-        
-        
+
+
         (nsis-font-lock-syntax-variable
          (1 font-lock-constant-face t))
-        
+
         (,(lambda(limit)
             (nsis-font-lock-no-comment limit "\\<un[.]"
                                        '(font-lock-comment-face font-lock-string-face)))
@@ -1092,13 +1212,13 @@
      (list
       ;; Sections
       (list "Sections" "^[ \t]*\\<Section\\>[ \t]+\\(?:/o[ \t]+\\)?\\(\"[!-]?\\(?:.*?\\)\"\\|[!-]?\\w+\\)" 1)
-          
+
       (list "SectionGroups" "^[ \t]*\\<SectionGroup\\>[ \t]+\\(?:/e[ \t]+\\)?\\(\"[!-]?\\(?:.*?\\)\"\\|[!-]?\\w+\\)" 1)
-          
+
       (list "Functions" "^[ \t]*\\<Function\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>[^.]" 1)
-          
+
       (list "Pages" "^[ \t]*\\<\\(?:Uninstpage\\|Page\\(?:Ex\\)?\\)\\>[ \t]+\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>[^.]" 1)
-          
+
       (list "Inserted Macro" "^[ \t]*\\<!insertmacro\\>[ \t]+\\([A-Za-z][A-Za-z0-9_]*\\)" 1)
       (list "User Variables"
             "^[ \t]*\\<Var\\>[ \t]+\\(?:/GLOBAL[ \t]+\\)?\\<\\([A-Za-z][A-Za-z0-9_]*\\)\\>" 1)
@@ -1121,7 +1241,7 @@
   ;; electric keys
   ;; indentation level modifiers
   ;; subprocess commands
-  (define-key nsis-mode-map (kbd "C-c C-e") 'nsis-execute-buffer) 
+  (define-key nsis-mode-map (kbd "C-c C-e") 'nsis-execute-buffer)
   (define-key nsis-mode-map (kbd "C-c C-r") 'nsis-run-file)
   (define-key nsis-mode-map (kbd "C-c C-c") 'nsis-compile-and-run)
   (define-key nsis-mode-map "\177" 'backward-delete-char-untabify)
@@ -1135,6 +1255,17 @@ package.")
 
 (require 'easymenu nil t)
 (require 'w32-browser nil t)
+
+(unless (fboundp 'w32-short-file-name)
+  (defun w32-short-file-name (str-to-emulate)
+    "Emulate the windows function for Linux.
+Just return STR-TO-EMULATE)"
+    (substring str-to-emulate)
+    )
+  )
+
+
+
 (when (featurep 'easymenu)
   (easy-menu-define nsis-menu
     nsis-mode-map "nsis Mode Menu"
@@ -1162,7 +1293,7 @@ package.")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun nsis-yas-desc (secn descn)
-  "Yasnippet check for description update.  For use with `nsis-yas-description'"
+  "Yasnippet check for description update.  For use with `nsis-yas-description'."
   (unless (or yas-moving-away-p yas-modified-p)
     (let (
           (sec (nsis-yas-sec (yas-field-value secn)))
@@ -1205,14 +1336,14 @@ package.")
         (insert "\n!insertmacro MUI_FUNCTION_DESCRIPTION_END")))))
 
 (defun nsis-yas-q ( &optional txt)
-  "Yasnippet quote transform"
+  "Yasnippet quote transform."
   (let ((ret yas-text))
     (if (not (and ret (or (< 0 (length ret)) (string-match "^[ \t]$" ret))))
         (setq ret "")
       (setq ret (or txt"\"")))))
 
 (defun nsis-yas-sec (&optional txt)
-  "Yasnippet section transform"
+  "Yasnippet section transform."
   (let ((ret (or txt yas-text)))
     (while (string-match "[^A-Za-z0-9_]" ret)
       (setq ret (replace-match "_" nil t ret))
@@ -1227,7 +1358,7 @@ package.")
     (symbol-value 'ret)))
 
 (defun nsis-yas-hidden-bold ()
-  "Yasnippet section transform"
+  "Yasnippet section transform."
   (let ((ret yas-text))
     (if (not (and ret (< 0 (length ret))))
         (setq ret "")
@@ -1243,7 +1374,7 @@ package.")
         (setq ret ""))))
     (symbol-value 'ret)))
 (defun yas-munge-callback-key-1 (val)
-  "Create first key based on callback"
+  "Create first key based on callback."
   (let ((x val))
     (when (string-match "^\\(un.on\\)" x)
       (setq x (replace-match "u" nil t x)))
@@ -1256,7 +1387,7 @@ package.")
     )
   )
 (defun yas-munge-callback-name (val)
-  "Changes Callback names to human-readable names"
+  "Change Callback names to human-readable names."
   (let ((x val)
         (start 0)
         (uninstall "")
@@ -1282,7 +1413,7 @@ package.")
 
 (defvar nsis-yas-snippets
       '(("General Attributes"
-         ( 
+         (
           "AddBrandingImage ${1:$$(yas-choose-value '(\"left\" \"right\" \"top\" \"bottom\"))} ${2:width/height} ${3:padding}"
           "AllowRootDirInstall ${1:$$(yas-choose-value '(\"true\" \"false\"))}"
           "AutoCloseWindow ${1:$$(yas-choose-value '(\"true\" \"false\"))}"
@@ -1355,7 +1486,7 @@ package.")
           "ExpandEnvStrings \\$${1:user_var(output)} \"${2:string}\" ; Env strings coded %ENV%"
           "ReadEnvStr \\$${1:user_var(output)} ${2:environemnt name}"
           "SearchPath \\$${1:user_var(output)} '${2:filename}' ; Look for file in search %PATH%"
-          
+
           ))
         ("File Instructions"
          (
@@ -1382,7 +1513,7 @@ package.")
           "FindFirst \\$${1:user_var(handle output)} \$${2:user_var(filename output)} '${3:filespec}'"
           "FindNext \\$${1:handle} \\$${2:user_var(filename_output)}"
           "FindClose \\$${1:handle}"
-          
+
           ))
         ("Ini Instructions"
          (
@@ -1439,7 +1570,7 @@ package.")
           "SetRebootFlag ${1:$$(yas-choose-value '(\"true\" \"false\"))}"
           "LogSet ${1:$$(yas-choose-value '(\"on\" \"off\"))}"
           "LogText '${1:Log Text}'"
-          
+
           )
          )
         ("String Manipulation Instructions"
@@ -1561,38 +1692,38 @@ package.")
  FunctionEnd
 "
           " ; ConnectInternet (uses Dialer plug-in)
- ; Written by Joost Verburg 
+ ; Written by Joost Verburg
  ;
  ; This function attempts to make a connection to the internet if there is no
  ; connection available. If you are not sure that a system using the installer
  ; has an active internet connection, call this function before downloading
  ; files with nsisdl.
- ; 
+ ;
  ; The function requires Internet Explorer 3, but asks to connect manually if
  ; IE3 is not installed.
- 
+
  Function ConnectInternet
- 
+
    Push $R0
-     
+
      ClearErrors
      Dialer::AttemptConnect
      IfErrors noie3
-     
+
      Pop $R0
      StrCmp $R0 \"online\" connected
        MessageBox MB_OK|MB_ICONSTOP \"Cannot connect to the internet.\"
        Quit ;This will quit the installer. You might want to add your own error handling.
-     
+
      noie3:
-   
+
      ; IE3 not installed
      MessageBox MB_OK|MB_ICONINFORMATION \"Please connect to the internet now.\"
-     
+
      connected:
-   
+
    Pop $R0
-   
+
  FunctionEnd
 " ";GetInstallerFilename
 System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
@@ -1603,7 +1734,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 
  System::Call 'kernel32::CreateMutexA(i 0, i 0, t \"${1:Text}\") i .r1 ?e'
  Pop $R0
- 
+
  StrCmp $R0 0 +3
    MessageBox MB_OK|MB_ICONEXCLAMATION \"${2:The installer is already running.}\"
    Abort
@@ -1635,7 +1766,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
         )
       (with-temp-file (concat new-dir "section.yasnippet")
         (insert "# -*- mode: snippet -*-\n# name: Section ... SectionEnd\n# key: section\n# key: sec\n# contributor: Matthew L. Fidler\n# --\nSection ${1:/o}${1:$(if (string= \"/o\" text) \" \" \"\")}\"$2\" sec_${2:$(nsis-yas-sec)} ${1:$(if (string= \"/o\" text) \"; Unchecked (/o)\" \"; Checked\")}${2:$(nsis-yas-hidden-bold)}\n  ; Description:\n  ; $3\n  ${4:$$(nsis-yas-desc 2 3)}$0\nSectionEnd ; sec_${2:$(nsis-yas-sec)}"))
-      
+
       (with-temp-file (concat new-dir "sectiongroup.yasnippet")
         (insert "# -*- mode: Snippet -*-\n# name: SectionGroup ... SectionGroupEnd\n# key: sectiongroup\n# key: secg\n# contributor: Matthew L. Fidler\n# --\nSectionGroup ${1:/e}${1:$(if (string= \"/e\" text) \" \" \"\")}\"$2\" sec_${2:$(nsis-yas-sec)} ${1:$(if (string= \"/3\" text) \"; Expanded (/e)\" \"; Collapsed\")}${2:$(nsis-yas-hidden-bold)}\n  ; Description:\n  ; $3\n  ${4:$$(nsis-yas-desc 2 3)}$0\nSectionGroupEnd ; sec_${2:$(nsis-yas-sec)}"))
       (with-temp-file (concat new-dir "function.nsisppet")
@@ -1685,22 +1816,22 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun nsis-nsis-menu ()
-  "Open nsis menu"
+  "Open NSIS menu."
   (interactive)
   (shell-command (w32-short-file-name nsis-nsis-menu-file)))
 
 (defun nsis-nsis-user-manual ()
-  "Open nsis Help (require w32-browser)"
+  "Open NSIS Help (require w32-browser)."
   (interactive)
   (w32-browser nsis-nsis-manual-file))
 
 (defun nsis-nsis-website ()
-  "Goto nsis website"
+  "Goto nsis website."
   (interactive)
   (browse-url "http://nsis.sourceforge.net/"))
 
 (defun nsis-nsis-forum ()
-  "Goto nsis forum"
+  "Goto nsis forum."
   (interactive)
   (browse-url "http://forums.winamp.com/forumdisplay.php?s=&forumid=65"))
 
@@ -1708,69 +1839,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 ;; nsis compile functions
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgroup nsis-mode nil
-  "nsis -- Yet another NSI-editing mode, www.nsi.org"
-  :group 'languages)
-
-(defcustom nsis-indent-level 2
-  "Indentation level for `nsis-mode'."
-  :type 'integer
-  :group 'nsis-mode)
-
-(defcustom nsis-nsis-manual-file
-  (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/nsis.chm"))
-	(nsis2 (concat (getenv "ProgramFiles(x86)")
-                       "/nsis/nsis.chm")))
-    (if (file-exists-p nsis) nsis
-      (if (file-exists-p nsis2) nsis2
-	"nsis.chm")))
-  "nsis help file"
-  :type 'file
-  :group 'nsis-mode)
-
-(defcustom nsis-nsis-menu-file
-  (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/nsis.exe"))
-	(nsis2 (concat (getenv "ProgramFiles(x86)")
-                       "/nsis/nsis.exe")))
-    (if (file-exists-p nsis) nsis
-        (if (file-exists-p nsis2) nsis2
-	  "nsis")))
-  "nsiss Menu File"
-  :type 'file
-  :group 'nsis-mode)
-
-(defcustom nsis-makensis-windows-command
-  (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/makensisw.exe"))
-	(nsis2 (concat (getenv "ProgramFiles(x86)")
-		       "/nsis/makensisw.exe")))
-    (if (file-exists-p nsis) nsis
-      (if (file-exists-p nsis2) nsis2
-	(executable-find "makensisw"))))
-  "nsis-mode windows command"
-  :type 'file
-  :group 'nsis-mode)
-
-(defcustom nsis-makensis-command
-  (let ((nsis (concat (getenv "ProgramFiles")
-                      "/nsis/makensis.exe"))
-	(nsis2 (concat (getenv "ProgramFiles(x86)")
-                      "/nsis/makensis.exe")))
-    (if (file-exists-p nsis) nsis
-      (if (file-exists-p nsis2) nsis2
-	(executable-find "makensis"))))
-  "nsis-mode command prompt"
-  :type 'file
-  :group 'nsis-mode)
-
-(defcustom nsis-run-nsis-async t
-  "nsis-mode run Nsis asynchronously"
-  :type 'boolean
-  :group 'nsis-mode)
-
-(defun nsis-execute-buffer (&optional async)
+(defun nsis-execute-buffer ()
   "Send the contents of the buffer to a Nsi interpreter."
   (interactive)
   (let ((nsi-file-name (buffer-file-name)))
@@ -1781,7 +1850,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
         (shell-command (concat nsis-makensis-windows-command " " nsi-file-name))))))
 
 (defun nsis-compile-and-run ()
-  "Send the contents of the buffer to a Nsi interpreter, and then run the NSI output."
+  "Send the contents of the buffer to a Nsi interpreter.
+Run run the NSI output then."
   (interactive)
   (let ((nsi-file-name (buffer-file-name)))
     (when nsi-file-name
@@ -1789,10 +1859,10 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       (nsis-async-execute-file nsi-file-name t))))
 
 (defvar nsis-run-file-name nil
-  "Constant for saving the file executed after compile")
+  "Constant for saving the file executed after compile.")
 
 (defun nsis-async-execute-file (file &optional run)
-  "Compiles the nsis file asynchronously"
+  "Compiles the nsis file asynchronously."
   (when run
     (setq nsis-run-file-name (nsis-get-output-file)))
   (get-buffer-create "*nsis*")
@@ -1803,10 +1873,22 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
   (insert (w32-short-file-name file))
   (insert "\"\n")
   (insert "\n================================================================================\n")
-  (apply 'start-process-shell-command "*nsis*"
-         "*nsis*"
-         (w32-short-file-name nsis-makensis-command)
-         (list (w32-short-file-name file)))
+;;   (apply 'start-process-shell-command "*nsis*"
+;;          "*nsis*"
+;;          (w32-short-file-name nsis-makensis-command)
+;;          (list (w32-short-file-name file)))
+
+;; (if (version< emacs-version "28.0")
+;;     (apply 'start-process-shell-command "*nsis*"
+;;            "*nsis*"
+;;            (w32-short-file-name nsis-makensis-command)
+;;            (list (w32-short-file-name file)))
+    (start-process-shell-command "*nsis*"
+                                 "*nsis*"
+                                 (concat (shell-quote-argument nsis-makensis-command)
+                                         " "
+                                         (shell-quote-argument file)))
+
   (if run
       (set-process-sentinel (get-buffer-process (current-buffer))
                             #'nsis-finish-compile-run)
@@ -1814,6 +1896,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                           #'nsis-finish-compile)))
 
 (defun nsis-get-output-file ()
+  "Find output name of NSIS compilation in NSIS source file."
   (when (buffer-file-name)
     (let ((dir (file-name-directory (buffer-file-name)))
           outfile)
@@ -1825,7 +1908,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       (symbol-value 'outfile))))
 
 (defun nsis-run-file (&optional out-file)
-  "Runs output file, possibly compiling if necessary."
+  "Run output file, possibly compiling if necessary."
   (interactive)
   (let ((out (or out-file (nsis-get-output-file))))
     (when (file-exists-p out)
@@ -1833,9 +1916,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                      out))))
 
 (defun nsis-finish-compile-run (&rest ignore)
-  "Finished Nsi Compilation, run output"
-  (save-excursion
-    (set-buffer "*nsis*")
+  "Run output after finished Nsi Compilation."
+  (with-current-buffer "*nsis*"
     (forward-line -1)
     (unless (looking-at ".*abort.*")
       (goto-char (point-max))
@@ -1845,9 +1927,8 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
       (nsis-run-file nsis-run-file-name))))
 
 (defun nsis-finish-compile (&rest ignore)
-  "Finished Nsi Compilation"
-  (save-excursion
-    (set-buffer "*nsis*")
+  "Finish Nsi Compilation."
+  (with-current-buffer "*nsis*"
     (goto-char (point-max))
     (insert "================================================================================\n")
     (insert "Finished Compilation\n")
@@ -1928,7 +2009,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                   (replace-regexp-in-string "'" "\\>"
                                                             (replace-regexp-in-string "`" "\\<"
                                                                                       (regexp-opt
-                                                                                       
+
                                                                                        (append (mapcar (lambda(x) (concat "`" (substring x 0 -3) "'"))
                                                                                                        (cl-remove-if-not (lambda(x) (string-match "End$" x))
                                                                                                                       nsis-syntax-reserved-word))
@@ -1937,13 +2018,13 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
                                                                                                  "`!ifmacrondef'"
                                                                                                  "`!macro'"
                                                                                                  "@"
-                                                                                                 "${If}" "${IfNot}" "${Unless}"
+                                                                                                 "${If}" "${IfNot}" "${Unless}" "${Else}"
                                                                                                  "${Select}" "${Switch}"
                                                                                                  "${Do}" "${DoWhile}"
                                                                                                  "${DoUntil}" "${While}"
                                                                                                  "${For}" "${ForEach}"
                                                                                                  ;;                                                                                                 "${RecFindOpen}" "${RecFindFirst}"
-                                                                                                 
+
                                                                                                  )) t) nil t) nil t) nil t))
   ;;"* Regular expression of nsis beginning keywords"
   )
@@ -1952,7 +2033,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
   (defvar nsis-indent-deindent-keywords
     (replace-regexp-in-string "@" "^[ \t]*[^-+!$0-9\n \t;#\"][^ \t\n]*?:[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)\\|^[ \t]*\"[^-+!$0-9\n \t;#][^ \t\n]*?:\"[ \t]*\\($\\|[#;]\\|/[*].*?[*]/[ \t]*$\\|/[*].*?$\\)"
                               (regexp-opt
-                               '( "`!elseif'"
+                               '( "!elseif" "!else"
                                   "@"
                                   "${AndIf}" "${AndIfNot}" "${AndUnless}" "${OrIf}"
                                   "${OrIfNot}" "${OrUnless}" "${ElseIf}" "${ElseIfNot}"
@@ -1985,7 +2066,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
     (eq (char-before (point)) ?\\)))
 
 (defun nsis-last-line-indentation (&optional orphan)
-  "Last line's indentation"
+  "Last line's indentation."
   (let (ret)
     (save-excursion
       (nsis-goto-last-line 'ret orphan)
@@ -1993,7 +2074,7 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
 
 
 (defmacro nsis-set-indent-count (count)
-  "Subroutine to set indentation key"
+  "Subroutine to set indentation key."
   `(cond
     ((looking-at  ,(eval-when-compile (format "[ \t]*%s" nsis-indent-orphans))))
     ((looking-at ,(eval-when-compile (format "[ \t]*%s" nsis-end-keywords)))
@@ -2004,7 +2085,9 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
        (setq ,count (- ,count 1))))))
 
 (defun nsis-goto-last-line (&optional li-q orphan)
-  "Go to the last line of code -- ignore continuation lines.  Set li-q to the current-indentation when requested."
+  "Go to the last line of code.
+- ignore continuation lines.
+- Set li-q to the =current-indentation= when requested."
   (if orphan
       (progn
         (let (count)
@@ -2063,18 +2146,18 @@ System::Call 'kernel32::GetModuleFileNameA(i 0, t .R0, i 1024) i r1'
      (looking-at (eval-when-compile (format "[ \t]*%s" nsis-indent-deindent-keywords))))))
 
 (defun nsis-font-lock-fontify-region-function (begin end)
-  "Fontify ")
+  "Fontify.")
 
-(defun nsis-comment-p ()
-  "*Are we in a comment?"
-  (save-match-data (or (looking-back "[;#].*") (nsis-in-multiline-comment-p))))
+;; (defun nsis-comment-p ()
+;;   "*Are we in a comment?"
+;;   (save-match-data (or (looking-back "[;#].*") (nsis-in-multiline-comment-p))))
 
 (defun nsis-in-multiline-comment-p ()
   "* Are we in a multi-line comment?"
   (save-match-data (nsis-is-between (regexp-quote "/*") (regexp-quote "*/") t)))
 
 (defun nsis-is-between (first last &optional eof last-q)
-  "Returns true of the carat is between the first and last .
+  "Return non-nil of the carat is between the first and last.
 
 If eof is true, then the last position is:
    (1) the position of the variable last
@@ -2082,8 +2165,7 @@ If eof is true, then the last position is:
    (3) the end of the buffer.
 If eof is nil, then the last position is:
    (1) the position of the next variable last.
-Returns first position.
-"
+Returns first position."
   (let (
         (first-posB nil)
         (last-posF nil)
@@ -2097,7 +2179,7 @@ Returns first position.
         (save-excursion
           (if (re-search-forward last nil t)
               (setq last-posF (point))
-            ;; 
+            ;;
             ;; Last not found, look for first.
             ;;
             (if eof
@@ -2109,7 +2191,7 @@ Returns first position.
                     ;;
                     (setq last-posF (point-max))))
               ;;
-              ;; Eof not true.  
+              ;; Eof not true.
               ;;
               (setq between nil)))))
     (if (and (not eof) between)
@@ -2130,7 +2212,7 @@ Returns first position.
     between))
 
 (defun nsis-indent-line-function ()
-  "nsis indent-line function"
+  "NSIS indent-line function."
   (interactive)
   (let ((curi (current-indentation))
         li
@@ -2157,7 +2239,7 @@ Returns first position.
         )
        ((nsis-last-line-indent-line-p 'li 'is-id 'orphan) ;; Last line indicates we should indent
         ;;(message "indent: %s,%s,%s" li is-id orphan)
-        
+
         (if (and is-id (not orphan)) ;; Actually indent/deindent line, keep same indentation.
             (unless (= li curi) ;; Change the indentation appropriately.
               (setq fli li))
@@ -2205,7 +2287,7 @@ Returns first position.
              (list 'nsis-mode  nsis-hs-start nil "\\(?:[;#]\\|/[*]\\)"
                    (lambda (arg) (nsis-forward-fold)) nil))
 (defun nsis-forward-fold (&rest arg)
-  "* Used to go to next folded expression in NSIS"
+  "* Used to go to next folded expression in NSIS."
   (interactive)
   (cond
    (
@@ -2238,7 +2320,7 @@ Returns first position.
 ;; Major mode declaration
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar nsis-mode-hook nil
-  "*nsis mode hook")
+  "* NSIS mode hook.")
 
 ;;;###autoload
 (defun nsis-mode ()
@@ -2246,11 +2328,11 @@ Returns first position.
   (interactive)
   ;; set up local variables
   (kill-all-local-variables)
-  
+
   (set (make-local-variable 'font-lock-multiline) t) ; Support multiline comments.
   (set (make-local-variable 'font-lock-defaults)
        '(nsis-font-lock-keywords nil t))
-  (set (make-local-variable 'font-lock-syntactic-keywords)
+  (set (make-local-variable 'syntax-propertize-function)
        nsis-font-lock-syntactic-keywords
        )
   (make-local-variable 'font-lock-extend-region-functions)
