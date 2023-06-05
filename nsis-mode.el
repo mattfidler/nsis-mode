@@ -704,7 +704,7 @@
        "$USERSTARTMENU"
        "$USERTEMPLATES"
        ;; Extra undefined in
-       "$nsisDIR"    
+       "$nsisDIR"
        ))
     "* nsis syntax variables"
     )
@@ -1263,8 +1263,6 @@ Just return STR-TO-EMULATE)"
     (substring str-to-emulate)
     )
   )
-
-
 
 (when (featurep 'easymenu)
   (easy-menu-define nsis-menu
@@ -2087,7 +2085,7 @@ Run run the NSI output then."
 (defun nsis-goto-last-line (&optional li-q orphan)
   "Go to the last line of code.
 - ignore continuation lines.
-- Set li-q to the =current-indentation= when requested."
+- Set LI-Q to the =current-indentation= when requested."
   (if orphan
       (progn
         (let (count)
@@ -2332,9 +2330,19 @@ Returns first position."
   (set (make-local-variable 'font-lock-multiline) t) ; Support multiline comments.
   (set (make-local-variable 'font-lock-defaults)
        '(nsis-font-lock-keywords nil t))
-  (set (make-local-variable 'syntax-propertize-function)
+
+  ;; TODO: replace obsolete variable 'font-lock-syntactic-keywords
+  ;;       by syntax-propertize-function
+  ;; however not just by
+  ;; (set (make-local-variable 'syntax-propertize-function)
+  ;;      nsis-font-lock-syntactic-keywords
+  ;;      )
+  ;; as this leads to problems with indentation
+  ;; TODO end
+  (set (make-local-variable 'font-lock-syntactic-keywords)
        nsis-font-lock-syntactic-keywords
        )
+
   (make-local-variable 'font-lock-extend-region-functions)
   (add-hook 'font-lock-extend-region-functions
             'nsis-font-lock-extend-region-continue t)
