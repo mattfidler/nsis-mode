@@ -915,30 +915,27 @@
 (defun nsis-font-lock-extend-region-continue ()
   "Extend region for multi-line matches, and multi-line comments."
   (interactive)
-  (condition-case error
-      (progn
-        (let (ret tmp end star-begin
-                  (debug-on-error t))
-          (save-excursion
-            (if (boundp 'font-lock-beg)
-                (goto-char font-lock-beg))
-            ;; (save-excursion
-            ;;   (setq star-begin (re-search-backward "\\([/][*]\\|[*][/]\\)" nil t))
-            ;;   (if (and star-begin (string= (match-string 1) "/*"))
-            ;;       (progn
-            ;;         (setq ret t)
-            ;;         (setq font-lock-beg (point)))
-            ;;     (setq star-begin nil)))
-            (beginning-of-line)
-            (while (re-search-backward "[\\][ \t]*\n\=" nil t)
-              (setq ret t)
-              (beginning-of-line)))
-          (if (and ret (not star-begin))
-              (setq font-lock-beg (point)))
-          (symbol-value 'ret)))
-    (error
-     (message "Error in `nsis-font-lock-extended-region-continue': %s"
-              (error-message-string error)))))
+  (let ((nsis-font-lock-beg nil))
+    (save-excursion
+      (if (boundp 'font-lock-beg)
+          (progn
+            (goto-char font-lock-beg)
+            (setq nsis-font-lock-beg font-lock-beg))
+        (setq font-lock-beg nil))
+      ;; (save-excursion
+      ;;   (setq star-begin (re-search-backward "\\([/][*]\\|[*][/]\\)" nil t))
+      ;;   (if (and star-begin (string= (match-string 1) "/*"))
+      ;;       (progn
+      ;;         (setq ret t)
+      ;;         (setq font-lock-beg (point)))
+      ;;     (setq star-begin nil)))
+      (beginning-of-line)
+      (while (re-search-backward "[\\][ \t]*\n\=" nil t)
+        (beginning-of-line)
+        (setq font-lock-beg (point))))
+    ;; Return only non-nil, if font-lock-beg moved by a non-zero amount,
+    ;; or you get an infinite loop during fontification.
+    (not (equal font-lock-beg nsis-font-lock-beg))))
 
 (defface nsis-font-lock-bold-string-face nil
   "Font lock bold string face."
